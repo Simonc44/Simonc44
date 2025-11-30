@@ -1,0 +1,32 @@
+{
+  "name": "CygnisAI",
+  "short_name": "CygnisAI",
+  "description": "Votre assistant IA intelligent pour explorer, créer et discuter.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0A0910",
+  "theme_color": "#2563EB",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3ZM12 19C8.13401 19 5 15.866 5 12C5 8.13401 8.13401 5 12 5C15.866 5 19 8.13401 19 12C19 15.866 15.866 19 12 19Z' fill='hsl(228 10% 4%)' opacity='0.2'/%3E%3Cpath d='M16.5414 10.3541C15.8617 9.68729 14.974 9.24988 14 9.10241V12.1873L16.5414 10.3541Z' fill='hsl(228 10% 4%)'/%3E%3Cpath d='M12.0001 14.8129L9.45874 16.6461C10.1384 17.3129 11.0261 17.7503 12.0001 17.8978V14.8129Z' fill='hsl(228 10% 4%)'/%3E%3Cpath d='M12.0001 6.10254C12.974 6.24995 13.8617 6.68735 14.5414 7.35413L12.0001 9.18734V6.10254Z' fill='hsl(228 10% 4%)'/%3E%3Cpath d='M15.5 12C15.5 13.933 13.933 15.5 12 15.5C10.067 15.5 8.5 13.933 8.5 12C8.5 10.067 10.067 8.5 12 8.5C13.933 8.5 15.5 10.067 15.5 12Z' stroke='hsl(228 10% 4%)' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
