@@ -40,7 +40,7 @@ const Hero = () => {
               asChild
             >
               <a
-                href="https://cygnis.gt.tc"
+                href="https://cygnis-ai.vercel.app"
                 target="_blank"
                 rel="noopener noreferrer"
               >
