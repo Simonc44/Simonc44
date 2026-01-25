@@ -6,16 +6,15 @@ const Projects = () => {
     {
       title: "Homa RH",
       description:
-        "Un site vitrine d'excellence pour un cabinet de conseil RH. Conception 'Mobile First' ultra-rapide (Score 100/100), design premium et outils de conversion interactifs (Diagnostic RH).",
+        "Un site vitrine d'excellence pour un cabinet de conseil RH. Conception 'Mobile First' ultra-rapide, design premium et outils de conversion interactifs (Diagnostic RH).",
       features: [
-        "⚡ Performance Maximale (100/100)",
+        "⚡ Performance Maximale",
         "🎨 Design Glassmorphism & Luxe",
         "🔍 SEO Local & Données Structurées",
         "🛠️ Outils de Diagnostic Interactif",
       ],
-      tech: ["HTML5", "CSS3", "JavaScript", "PHP"],
       links: {
-        live: "https://homa-rh.fr",
+        live: "https://homa-rh.vercel.app",
         // github: "..." // Ajoutez le lien si le repo est public
       },
       gradient: "from-emerald-700 to-amber-500",
