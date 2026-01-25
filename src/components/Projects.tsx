@@ -13,7 +13,7 @@ const Projects = () => {
         "🔍 SEO Local & Données Structurées",
         "🛠️ Outils de Diagnostic Interactif",
       ],
-      tech: ["non disponible"], // Ajouté ici pour éviter le crash
+      tech: ["Non Disponible"], // Ajouté ici pour éviter le crash
       links: {
         live: "https://homa-rh.vercel.app",
         // github: "..." // Ajoutez le lien si le repo est public
