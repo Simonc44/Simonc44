@@ -32,7 +32,7 @@ const Projects = () => {
       ],
       tech: ["Next.js", "React", "TypeScript", "Firebase", "Google Gemini"],
       links: {
-        live: "https://cygnis.gt.tc",
+        live: "https://cygnis-ai.vercel.app",
         github: "https://github.com/Simonc44/cygnis",
       },
       gradient: "from-blue-500 to-purple-600",
@@ -49,7 +49,7 @@ const Projects = () => {
       ],
       tech: ["Vite", "React", "TypeScript", "Tailwind CSS"],
       links: {
-        live: "https://lovable.dev/projects/aa336caf-1947-42db-a892-51067e900890",
+        live: "https://procivi-08704062.web.app/",
         github: "https://github.com/Simonc44/Procivi",
       },
       gradient: "from-emerald-500 to-teal-600",
