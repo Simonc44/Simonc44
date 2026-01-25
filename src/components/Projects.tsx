@@ -4,6 +4,23 @@ import { ExternalLink, Github } from "lucide-react";
 const Projects = () => {
   const projects = [
     {
+      title: "Homa RH",
+      description:
+        "Un site vitrine d'excellence pour un cabinet de conseil RH. Conception 'Mobile First' ultra-rapide (Score 100/100), design premium et outils de conversion interactifs (Diagnostic RH).",
+      features: [
+        "⚡ Performance Maximale (100/100)",
+        "🎨 Design Glassmorphism & Luxe",
+        "🔍 SEO Local & Données Structurées",
+        "🛠️ Outils de Diagnostic Interactif",
+      ],
+      tech: ["HTML5", "CSS3", "JavaScript", "PHP"],
+      links: {
+        live: "https://homa-rh.fr",
+        // github: "..." // Ajoutez le lien si le repo est public
+      },
+      gradient: "from-emerald-700 to-amber-500",
+    },
+    {
       title: "CygnisAI",
       description:
         "An innovative AI platform designed to connect your data and unlock its potential. Features customizable AI agents, multi-modal content generation, and long-term memory for personalized experiences.",
