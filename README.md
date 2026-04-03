@@ -1,47 +1,66 @@
-# 👋 Hi! I'm Simon
+# 👋 Bonjour ! Je suis Simon
 
-<p align="left"> 
-
-  <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white"/>
-
-  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white"/>
-
-  <img src="https://img.shields.io/badge/GenAI-8A2BE2?style=for-the-badge&logo=openai&logoColor=white"/>
-
-  <img src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black"/>
-
-  <img src="https://img.shields.io/badge/SaaS%20Design-C64B7A?style=for-the-badge&logo=dribbble&logoColor=white"/>
-
-  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB"/>
-
+<p align="center">
+  <img src="https://cdn-thumbnails.huggingface.co/social-thumbnails/cygnisai.png" alt="CygnisAI Logo" width="300" />
 </p>
 
-I'm a passionate developer and the founder of **CygnisAI**, an innovative platform designed to connect your data and unlock its potential with intelligent AI. My mission is to build intuitive, high-performance tools that leverage LLM orchestration to solve real-world problems.
-
-I am particularly focused on **Human-Computer Interaction (HCI)** and how generative models can be seamlessly integrated into professional workflows. I strive to be an independent developer known for creating polished, thoughtful, and visually aesthetic digital products.
-
----
-
-### 🚀 Projects & Focus
-
-* **Current Venture:** Leading [CygnisAI](https://github.com/Simonc44/cygnis), focusing on seamless UX and advanced multi-modal generation.
-* **Deep Dive:** Mastering LLM orchestration, serverless scaling with Firebase, and RAG (Retrieval-Augmented Generation) architectures.
-* **Vision:** Crafting the next generation of SaaS tools where AI isn't just a feature, but the core engine of productivity.
+<p align="center">
+  <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white"/>
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black"/>
+  <img src="https://img.shields.io/badge/SaaS%20Design-C64B7A?style=for-the-badge&logo=dribbble&logoColor=white"/>
+  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB"/>
+</p>
 
 ---
 
-### 🛠 Tech Stack & Tools
+### 👤 À propos
 
-| Category | Stack |
+Je suis un développeur passionné et le fondateur de **CygnisAI**, une plateforme innovante conçue pour connecter vos données et débloquer leur potentiel grâce à l'intelligence artificielle. Ma mission est de construire des outils intuitifs et performants qui tirent parti de l'orchestration de LLM pour résoudre des problèmes concrets.
+
+Je me concentre particulièrement sur **l'Interaction Homme-Machine (IHM)** et sur la manière dont les modèles génératifs peuvent être intégrés de manière transparente dans les flux de travail professionnels. Je m'efforce d'être un développeur indépendant reconnu pour la création de produits numériques soignés, réfléchis et visuellement esthétiques.
+
+---
+
+### 🚀 Projets & Focus
+
+* **Entreprise Actuelle :** À la tête de [CygnisAI](https://github.com/Simonc44/cygnis), avec un accent sur une UX fluide et une génération multi-modale avancée.
+* **Approfondissement :** Maîtrise de l'orchestration de LLM, du scaling serverless avec Firebase, et des architectures RAG (Retrieval-Augmented Generation).
+* **Vision :** Créer la prochaine génération d'outils SaaS où l'IA n'est pas seulement une fonctionnalité, mais le moteur central de la productivité.
+
+---
+
+### 🛠 Tech Stack & Outils
+
+| Catégorie | Stack |
 | :--- | :--- |
 | **Frontend** | Next.js, React, Tailwind CSS, TypeScript |
 | **Backend & Cloud** | Firebase, Serverless Functions, Node.js |
-| **AI / ML** | Google Gemini API, LLM Orchestration, Prompt Engineering |
-| **Design** | Aesthetic UI/UX, Creative Digital Content |
+| **IA / ML** | Google Gemini API, Orchestration LLM, Prompt Engineering |
+| **Design** | UI/UX Esthétique, Contenu Numérique Créatif |
 
 ---
 
-### 🌐 Connect with me
+### 📊 Statistiques GitHub
+
+<p align="center">
+  <img src="https://github-readme-stats.vercel.app/api?username=Simonc44&show_icons=true&theme=tokyonight&hide_border=true" alt="Simon's GitHub Stats" />
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=Simonc44&layout=compact&theme=tokyonight&hide_border=true" alt="Top Languages" />
+</p>
+
+---
+
+### 🤝 Collaborons ensemble
+
+Je suis toujours ouvert à discuter de projets passionnants, de nouvelles technologies ou d'opportunités de collaboration. N'hésitez pas à me contacter si vous souhaitez :
+
+* Discuter d'architectures RAG ou d'orchestration de LLM.
+* Échanger sur le design UI/UX pour les produits SaaS.
+* Explorer des synergies autour de CygnisAI.
+
+---
+
+### 🌐 Me connecter
 
 <p align="left">
   <a href="https://www.linkedin.com/in/simon-chusseau-91541a378/" target="_blank">
@@ -57,4 +76,4 @@ I am particularly focused on **Human-Computer Interaction (HCI)** and how genera
 
 ---
 
-> "The best way to predict the future is to build it."
+> "La meilleure façon de prédire l'avenir est de le construire."
