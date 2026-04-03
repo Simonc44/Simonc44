@@ -6,7 +6,7 @@ I'm a passionate developer and the founder of **CygnisAI**, an innovative platfo
 
 <div align="center">
   <a href="https://cygnis.gt.tc" target="_blank">
-    <img src="https://cygnis-ai.vercel.app/favicon.ico" alt="CygnisAI Logo" width="150">
+    <img src="https://cygnis-ai.vercel.app/favicon.svg" alt="CygnisAI Logo" width="150">
   </a>
 </div>
 
