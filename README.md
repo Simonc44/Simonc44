@@ -5,7 +5,7 @@ I'm a passionate developer and the founder of **Mandat**, an open-source civic t
 ---
 
 <div align="center">
-  <a href="https://cygnis.gt.tc" target="_blank">
+  <a href="https://mandat-fr.vercel.app" target="_blank">
     <img src="https://mandat-fr.vercel.app/favicon.ico" alt="Mandat Logo" width="150">
   </a>
 </div>
