@@ -1,12 +1,12 @@
 # Hi there, I'm Simon
 
-I'm a passionate developer and the founder of **Mandat**, an innovative platform designed to connect your data and unlock its potential with intelligent AI. My goal is to build intuitive and powerful tools that leverage cutting-edge artificial intelligence to solve real-world problems.
+I'm a passionate developer and the founder of **Mandat**, an open-source civic tech platform and citizen-focused search engine designed to make the 7,818 voting records of the French National Assembly (17th legislature) transparent and easy to read.
 
 ---
 
 <div align="center">
   <a href="https://cygnis.gt.tc" target="_blank">
-    <img src="https://cygnis-ai.vercel.app/favicon.svg" alt="CygnisAI Logo" width="150">
+    <img src="https://mandat-fr.vercel.app/favicon.ico" alt="Mandat Logo" width="150">
   </a>
 </div>
 
@@ -14,10 +14,10 @@ I'm a passionate developer and the founder of **Mandat**, an innovative platform
 
 ### About Me
 
-- **I’m currently working on:** Leading the development of [CygnisAI](https://github.com/Simonc44/cygnis), focusing on creating a seamless user experience and integrating advanced generative AI models.  
+- **I’m currently working on:** Leading the development of [Mandat](https://github.com/Simonc44/mandat), focusing on creating a seamless user experience and integrating advanced generative AI models.  
 - **I’m currently learning:** Advanced techniques in Large Language Model (LLM) orchestration, multi-modal generation, and scaling AI applications with serverless technologies.  
 - **I’m looking to collaborate on:** Open-source AI projects, innovative developer tools, and anything that pushes the boundaries of human-computer interaction.  
-- **I’m looking for help with:** Feedback and contributions for CygnisAI to make it even better!  
+- **I’m looking for help with:** Feedback and contributions for Mandat to make it even better!  
 - **Ask me about:** AI/ML, Next.js, Firebase, TypeScript, and building SaaS products from the ground up.  
 - **How to reach me:** Connect with me on [LinkedIn](https://www.linkedin.com/in/simon-chusseau-91541a378/) or follow me on [Instagram](https://www.instagram.com/simonchusseau/).
 
