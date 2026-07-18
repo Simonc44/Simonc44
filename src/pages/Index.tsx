@@ -1,6 +1,7 @@
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
+import GitHubTerminal from "@/components/GitHubTerminal";
 import TechStack from "@/components/TechStack";
 import Projects from "@/components/Projects";
 import Contact from "@/components/Contact";
@@ -12,6 +13,7 @@ const Index = () => {
       <main>
         <Hero />
         <About />
+        <GitHubTerminal />
         <TechStack />
         <Projects />
         <Contact />
