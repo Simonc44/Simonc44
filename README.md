@@ -30,7 +30,7 @@ I'm a passionate developer and the founder of **Mandat** and **CygnisAI**. I bui
 - **I’m looking to collaborate on:** Open-source AI projects, innovative developer tools, and anything that pushes the boundaries of human-computer interaction.  
 - **I’m looking for help with:** Feedback and contributions for Mandat to make it even better!  
 - **Ask me about:** AI/ML, Next.js, Firebase, TypeScript, and building SaaS products from the ground up.  
-- **How to reach me:** Connect with me on [LinkedIn](https://www.linkedin.com/in/simon-chusseau-91541a378/) or follow me on [Instagram](https://www.instagram.com/simonchusseau/).
+- **How to reach me:** Connect with me on [LinkedIn](https://www.linkedin.com/in/simon-chusseau-91541a378/).
 
 ---
 
