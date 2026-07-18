@@ -10,10 +10,14 @@ const Hero = () => {
       
       <div className="container relative z-10 px-4 py-20">
         <div className="max-w-4xl mx-auto text-center space-y-8 animate-fade-in">
-          {/* Animated avatar placeholder */}
-          <div className="relative inline-block">
-            <div className="w-32 h-32 rounded-full bg-gradient-primary animate-glow mx-auto mb-6 flex items-center justify-center text-6xl font-bold">
-              SC
+          {/* Animated profile image */}
+          <div className="relative inline-block group">
+            <div className="w-32 h-32 rounded-full bg-gradient-primary animate-glow mx-auto mb-6 overflow-hidden flex items-center justify-center border-4 border-primary/20 transition-all duration-500 group-hover:scale-105 group-hover:border-primary/50 shadow-lg">
+              <img
+                src="/profile.png"
+                alt="Simon Chusseau"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              />
             </div>
           </div>
 
