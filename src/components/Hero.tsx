@@ -1,128 +1,100 @@
-import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Github, Linkedin, Instagram, ArrowDown } from "lucide-react";
 
-const ROLES = [
-  "Full-Stack Developer",
-  "Indie Maker",
-  "AI Builder",
-  "Open Source Contributor",
-];
-
+/**
+ * Hero — typing animation done 100% in CSS (span::before + @keyframes animate)
+ * so Google Translate never touches a React-managed text node and can't crash the tree.
+ */
 const Hero = () => {
-  const [roleIndex, setRoleIndex] = useState(0);
-  const [displayed, setDisplayed] = useState("");
-  const [deleting, setDeleting] = useState(false);
-  const [charIdx, setCharIdx] = useState(0);
-
-  useEffect(() => {
-    const current = ROLES[roleIndex];
-    let timeout: ReturnType<typeof setTimeout>;
-
-    if (!deleting && charIdx <= current.length) {
-      setDisplayed(current.slice(0, charIdx));
-      timeout = setTimeout(() => setCharIdx((c) => c + 1), 60);
-    } else if (!deleting && charIdx > current.length) {
-      timeout = setTimeout(() => setDeleting(true), 1800);
-    } else if (deleting && charIdx >= 0) {
-      setDisplayed(current.slice(0, charIdx));
-      timeout = setTimeout(() => setCharIdx((c) => c - 1), 35);
-    } else {
-      setDeleting(false);
-      setRoleIndex((i) => (i + 1) % ROLES.length);
-    }
-
-    return () => clearTimeout(timeout);
-  }, [charIdx, deleting, roleIndex]);
-
-  const scrollToProjects = (e: React.MouseEvent) => {
+  const scrollTo = (id: string) => (e: React.MouseEvent) => {
     e.preventDefault();
-    document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const scrollToContact = (e: React.MouseEvent) => {
-    e.preventDefault();
-    document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-hero" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_20%,_hsl(217_91%_60%_/_0.12),_transparent_55%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_80%,_hsl(260_80%_70%_/_0.10),_transparent_55%)]" />
+    <section className="hero-section relative min-h-screen flex items-center overflow-hidden">
+      {/* background glows */}
+      <div className="absolute inset-0 bg-gradient-hero pointer-events-none" />
+      <div className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse at 25% 25%, hsl(217 91% 60% / 0.13) 0%, transparent 55%), " +
+            "radial-gradient(ellipse at 75% 75%, hsl(260 80% 70% / 0.10) 0%, transparent 55%)",
+        }}
+      />
 
-      <div className="container relative z-10 px-4 py-24">
+      <div className="container relative z-10 px-4 py-24 w-full">
         <div className="max-w-5xl mx-auto">
-          {/* Two-column layout */}
-          <div className="flex flex-col-reverse md:flex-row items-center gap-12 md:gap-16">
+          <div className="flex flex-col-reverse md:flex-row items-center gap-12 md:gap-20">
 
-            {/* LEFT — text */}
-            <div className="flex-1 space-y-6 text-center md:text-left">
-              <p className="text-sm font-mono text-primary/70 tracking-widest uppercase animate-fade-in">
-                Hello, world! I'm
+            {/* ── LEFT ── */}
+            <div className="flex-1 space-y-7 text-center md:text-left">
+
+              <p className="text-sm font-mono tracking-widest uppercase" style={{ color: "hsl(217 91% 60% / 0.7)" }}>
+                Hello, world! I&#39;m
               </p>
 
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.05] animate-fade-in">
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight">
                 Simon
-                <br />
-                <span className="text-gradient">Chusseau</span>
+                <strong style={{ color: "hsl(217 91% 60%)" }}>.</strong>
               </h1>
 
-              {/* Typing role */}
-              <div className="h-8 flex items-center justify-center md:justify-start">
-                <span className="text-xl md:text-2xl text-muted-foreground font-mono">
-                  {displayed}
-                  <span className="inline-block w-0.5 h-5 bg-primary ml-0.5 animate-pulse" />
-                </span>
+              {/*
+                CSS-only typing animation.
+                The <span> has no text children — content comes entirely from
+                the ::before pseudo-element, so Google Translate can't touch it.
+              */}
+              <div className="hero-role-wrapper">
+                <span className="hero-role" aria-label="Full-Stack Developer, Indie Maker, AI Builder, Open Source Contributor" translate="no" />
               </div>
 
-              <p className="text-muted-foreground text-lg max-w-lg leading-relaxed mx-auto md:mx-0">
+              <p className="text-lg leading-relaxed max-w-lg mx-auto md:mx-0" style={{ color: "hsl(215 20% 58%)" }}>
                 Founder of{" "}
                 <a
                   href="https://cygnis-ai.vercel.app"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-primary font-semibold hover:underline underline-offset-4"
+                  className="font-semibold hover:underline underline-offset-4"
+                  style={{ color: "hsl(217 91% 60%)" }}
                 >
                   CygnisAI
-                </a>{" "}
-                — building products that connect data and intelligence. Based in France, shipping worldwide.
+                </a>
+                {" "}— building products that connect data and intelligence.
+                Based in France, shipping worldwide.
               </p>
 
-              {/* CTAs */}
-              <div className="flex flex-wrap gap-3 justify-center md:justify-start pt-2">
+              <div className="flex flex-wrap gap-3 justify-center md:justify-start">
                 <Button
                   size="lg"
-                  className="bg-gradient-primary hover:shadow-glow transition-all duration-300 font-semibold"
-                  onClick={scrollToContact}
+                  className="font-semibold"
+                  style={{ background: "linear-gradient(135deg, hsl(217 91% 60%), hsl(260 80% 70%))" }}
+                  onClick={scrollTo("contact")}
                 >
                   Connect now
                 </Button>
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-primary/40 hover:bg-primary/10 transition-all duration-300"
-                  onClick={scrollToProjects}
+                  className="border-primary/40 hover:bg-primary/10"
+                  onClick={scrollTo("projects")}
                 >
                   My Projects
                 </Button>
               </div>
 
-              {/* Socials */}
-              <div className="flex gap-3 pt-2 justify-center md:justify-start">
+              <div className="flex gap-3 justify-center md:justify-start">
                 {[
-                  { href: "https://www.linkedin.com/in/simon-chusseau-91541a378/", icon: Linkedin, label: "LinkedIn" },
-                  { href: "https://www.instagram.com/simonchusseau/", icon: Instagram, label: "Instagram" },
-                  { href: "https://github.com/Simonc44", icon: Github, label: "GitHub" },
-                ].map(({ href, icon: Icon, label }) => (
+                  { href: "https://www.linkedin.com/in/simon-chusseau-91541a378/", Icon: Linkedin, label: "LinkedIn" },
+                  { href: "https://www.instagram.com/simonchusseau/", Icon: Instagram, label: "Instagram" },
+                  { href: "https://github.com/Simonc44", Icon: Github, label: "GitHub" },
+                ].map(({ href, Icon, label }) => (
                   <a
                     key={label}
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={label}
-                    className="p-2.5 rounded-xl bg-card/60 border border-primary/10 hover:border-primary/40 hover:bg-primary/10 transition-all duration-300 hover:scale-110"
+                    className="p-2.5 rounded-xl border border-primary/10 bg-card/60 hover:border-primary/40 hover:bg-primary/10 transition-all duration-300 hover:scale-110"
                   >
                     <Icon className="w-5 h-5" />
                   </a>
@@ -130,21 +102,29 @@ const Hero = () => {
               </div>
             </div>
 
-            {/* RIGHT — profile card */}
-            <div className="flex-shrink-0">
-              <div className="relative group">
-                {/* Glow ring */}
-                <div className="absolute -inset-1 rounded-3xl bg-gradient-primary opacity-30 blur-xl group-hover:opacity-50 transition-opacity duration-500" />
-                <div className="relative w-56 h-56 md:w-72 md:h-72 rounded-3xl overflow-hidden border-2 border-primary/20 group-hover:border-primary/40 transition-all duration-500 shadow-card">
-                  <img
-                    src="/profile.png"
-                    alt="Simon Chusseau"
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  {/* Overlay badge */}
-                  <div className="absolute bottom-3 left-3 right-3 bg-background/80 backdrop-blur-sm rounded-xl px-3 py-2 border border-primary/20">
-                    <p className="text-xs font-mono text-primary/80">🟢 Open to collabs</p>
-                  </div>
+            {/* ── RIGHT — Mac-style card like reference site ── */}
+            <div className="flex-shrink-0 w-full max-w-xs md:max-w-sm">
+              <div className="hero-card rounded-2xl overflow-hidden border border-primary/20 shadow-card transition-all duration-500 hover:border-primary/40">
+                {/* title bar */}
+                <div className="hero-card-bar flex items-center gap-2 px-4 py-3" style={{ background: "hsl(222 47% 13%)", borderBottom: "1px solid hsl(217 32% 20%)" }}>
+                  <span className="w-3 h-3 rounded-full" style={{ background: "#FE5E58" }} />
+                  <span className="w-3 h-3 rounded-full" style={{ background: "#FEBD2C" }} />
+                  <span className="w-3 h-3 rounded-full" style={{ background: "#27C841" }} />
+                  <span className="ml-auto text-xs font-mono" style={{ color: "hsl(215 20% 45%)" }}>simon@portfolio:~</span>
+                </div>
+                {/* body */}
+                <div className="p-6 space-y-3 font-mono text-sm" style={{ background: "hsl(222 47% 11%)" }}>
+                  <p style={{ color: "hsl(217 91% 60%)" }}>$ whoami</p>
+                  <p style={{ color: "hsl(215 20% 75%)" }}>Simon Chusseau</p>
+                  <p style={{ color: "hsl(217 91% 60%)" }}>$ cat about.txt</p>
+                  <p style={{ color: "hsl(215 20% 65%)" }}>
+                    🚀 Indie Maker &amp; AI Builder<br />
+                    📍 France — remote worldwide<br />
+                    🛠 React · TypeScript · LLMs<br />
+                    🌱 Building: CygnisAI · Mandat<br />
+                    ✅ Open to collabs
+                  </p>
+                  <p style={{ color: "hsl(217 91% 60%)" }}>$ _<span className="hero-cursor" translate="no" /></p>
                 </div>
               </div>
             </div>
@@ -153,7 +133,6 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Scroll indicator */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce opacity-60">
         <ArrowDown className="w-5 h-5 text-primary" />
       </div>
