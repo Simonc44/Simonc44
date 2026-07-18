@@ -1,140 +1,99 @@
-import { Button } from "@/components/ui/button";
-import { Github, Linkedin, Instagram, ArrowDown } from "lucide-react";
+import React, { useState } from "react";
 
-/**
- * Hero — typing animation done 100% in CSS (span::before + @keyframes animate)
- * so Google Translate never touches a React-managed text node and can't crash the tree.
- */
 const Hero = () => {
-  const scrollTo = (id: string) => (e: React.MouseEvent) => {
+  const [showResults, setShowResults] = useState(true);
+
+  const scrollToSection = (id: string) => (e: React.MouseEvent) => {
     e.preventDefault();
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   return (
-    <section className="hero-section relative min-h-screen flex items-center overflow-hidden">
-      {/* background glows */}
-      <div className="absolute inset-0 bg-gradient-hero pointer-events-none" />
-      <div className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse at 25% 25%, hsl(217 91% 60% / 0.13) 0%, transparent 55%), " +
-            "radial-gradient(ellipse at 75% 75%, hsl(260 80% 70% / 0.10) 0%, transparent 55%)",
-        }}
-      />
+    <section id="hero" className="relative min-h-screen pt-24 pb-12 px-6 md:px-12 bg-white flex items-center">
+      <div className="container max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12">
 
-      <div className="container relative z-10 px-4 py-24 w-full">
-        <div className="max-w-5xl mx-auto">
-          <div className="flex flex-col-reverse md:flex-row items-center gap-12 md:gap-20">
+        {/* Left Side — Intro text, dynamic switching header, CTA buttons, ID Card */}
+        <div className="flex-1 w-full flex flex-col items-start space-y-6 relative">
 
-            {/* ── LEFT ── */}
-            <div className="flex-1 space-y-7 text-center md:text-left">
+          {/* Dynamic Cycling Header */}
+          <div className="text-3xl md:text-4xl font-bold font-garamond-bold text-black h-12 flex items-center">
+            <span className="hero-switching-text"></span>
+            <span className="text-[#006AFF] ml-1 font-bold font-garamond-bold"> .</span>
+          </div>
 
-              <p className="text-sm font-mono tracking-widest uppercase" style={{ color: "hsl(217 91% 60% / 0.7)" }}>
-                Hello, world! I&#39;m
-              </p>
+          {/* GIF Text Bubble that disappears after 2.5s */}
+          <div className="text-bubble-container absolute -top-8 left-0 z-20 pointer-events-none">
+            <img src="/textbubble.gif" alt="Welcome bubble" className="w-[300px] text-bubble-gif" />
+          </div>
 
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight">
-                Simon
-                <strong style={{ color: "hsl(217 91% 60%)" }}>.</strong>
-              </h1>
+          {/* Self-taught Web Developer text (faded in after 2.5s) */}
+          <div className="delayed-intro-text text-gray-500 font-garamond-regular text-lg max-w-lg leading-relaxed">
+            <p>
+              Hey There! I am Simon Chusseau - A Self Taught Developer, founder of Mandat and CygnisAI. Welcome to my Professional Portfolio.
+            </p>
 
-              {/*
-                CSS-only typing animation.
-                The <span> has no text children — content comes entirely from
-                the ::before pseudo-element, so Google Translate can't touch it.
-              */}
-              <div className="hero-role-wrapper">
-                <span className="hero-role" aria-label="Full-Stack Developer, Indie Maker, AI Builder, Open Source Contributor" translate="no" />
-              </div>
-
-              <p className="text-lg leading-relaxed max-w-lg mx-auto md:mx-0" style={{ color: "hsl(215 20% 58%)" }}>
-                Founder of{" "}
-                <a
-                  href="https://cygnis-ai.vercel.app"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-semibold hover:underline underline-offset-4"
-                  style={{ color: "hsl(217 91% 60%)" }}
-                >
-                  CygnisAI
-                </a>
-                {" "}— building products that connect data and intelligence.
-                Based in France, shipping worldwide.
-              </p>
-
-              <div className="flex flex-wrap gap-3 justify-center md:justify-start">
-                <Button
-                  size="lg"
-                  className="font-semibold"
-                  style={{ background: "linear-gradient(135deg, hsl(217 91% 60%), hsl(260 80% 70%))" }}
-                  onClick={scrollTo("contact")}
-                >
-                  Connect now
-                </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-primary/40 hover:bg-primary/10"
-                  onClick={scrollTo("projects")}
-                >
-                  My Projects
-                </Button>
-              </div>
-
-              <div className="flex gap-3 justify-center md:justify-start">
-                {[
-                  { href: "https://www.linkedin.com/in/simon-chusseau-91541a378/", Icon: Linkedin, label: "LinkedIn" },
-                  { href: "https://www.instagram.com/simonchusseau/", Icon: Instagram, label: "Instagram" },
-                  { href: "https://github.com/Simonc44", Icon: Github, label: "GitHub" },
-                ].map(({ href, Icon, label }) => (
-                  <a
-                    key={label}
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={label}
-                    className="p-2.5 rounded-xl border border-primary/10 bg-card/60 hover:border-primary/40 hover:bg-primary/10 transition-all duration-300 hover:scale-110"
-                  >
-                    <Icon className="w-5 h-5" />
-                  </a>
-                ))}
-              </div>
+            {/* CTA Buttons */}
+            <div className="flex flex-wrap gap-4 mt-6">
+              <a
+                href="#contact"
+                onClick={scrollToSection("contact")}
+                className="px-6 py-3 bg-[#006AFF] text-white font-semibold font-garamond-regular rounded-full hover:bg-white hover:text-black border border-[#006AFF] shadow-[0_3px_5px_rgba(0,106,255,0.4)] hover:shadow-[0_3px_10px_rgba(173,216,230,0.5)] transition-all duration-300"
+              >
+                Connect Now
+              </a>
+              <a
+                href="#projects"
+                onClick={scrollToSection("projects")}
+                className="px-6 py-3 bg-white text-gray-800 font-semibold font-garamond-regular rounded-full hover:bg-[#006AFF] hover:text-white border border-[#ededed] hover:border-[#006AFF] shadow-[0_3px_10px_rgba(173,216,230,0.3)] hover:shadow-[0_3px_5px_rgba(0,106,255,0.4)] transition-all duration-300"
+              >
+                My Projects
+              </a>
             </div>
+          </div>
 
-            {/* ── RIGHT — Mac-style card like reference site ── */}
-            <div className="flex-shrink-0 w-full max-w-xs md:max-w-sm">
-              <div className="hero-card rounded-2xl overflow-hidden border border-primary/20 shadow-card transition-all duration-500 hover:border-primary/40">
-                {/* title bar */}
-                <div className="hero-card-bar flex items-center gap-2 px-4 py-3" style={{ background: "hsl(222 47% 13%)", borderBottom: "1px solid hsl(217 32% 20%)" }}>
-                  <span className="w-3 h-3 rounded-full" style={{ background: "#FE5E58" }} />
-                  <span className="w-3 h-3 rounded-full" style={{ background: "#FEBD2C" }} />
-                  <span className="w-3 h-3 rounded-full" style={{ background: "#27C841" }} />
-                  <span className="ml-auto text-xs font-mono" style={{ color: "hsl(215 20% 45%)" }}>simon@portfolio:~</span>
-                </div>
-                {/* body */}
-                <div className="p-6 space-y-3 font-mono text-sm" style={{ background: "hsl(222 47% 11%)" }}>
-                  <p style={{ color: "hsl(217 91% 60%)" }}>$ whoami</p>
-                  <p style={{ color: "hsl(215 20% 75%)" }}>Simon Chusseau</p>
-                  <p style={{ color: "hsl(217 91% 60%)" }}>$ cat about.txt</p>
-                  <p style={{ color: "hsl(215 20% 65%)" }}>
-                    🚀 Indie Maker &amp; AI Builder<br />
-                    📍 France — remote worldwide<br />
-                    🛠 React · TypeScript · LLMs<br />
-                    🌱 Building: CygnisAI · Mandat<br />
-                    ✅ Open to collabs
-                  </p>
-                  <p style={{ color: "hsl(217 91% 60%)" }}>$ _<span className="hero-cursor" translate="no" /></p>
+          {/* Profile ID Card with macOS controls */}
+          {showResults ? (
+            <div className="w-full max-w-sm mt-8 border-2 border-gray-200 rounded-xl shadow-[2px_2px_5px_rgba(0,0,0,0.08)] bg-white hover:rotate-[-1deg] hover:scale-[1.015] transition-all duration-300 overflow-hidden font-mono">
+              {/* Window controls header bar */}
+              <div className="bg-[#ededed] px-4 py-2 border-b border-gray-200 flex items-center gap-1.5">
+                <span onClick={() => setShowResults(false)} className="w-3.5 h-3.5 rounded-full bg-[#FE5E58] flex items-center justify-center text-[8px] font-bold text-red-800 cursor-pointer select-none">×</span>
+                <span className="w-3.5 h-3.5 rounded-full bg-[#FEBD2C]" />
+                <span className="w-3.5 h-3.5 rounded-full bg-[#27C841]" />
+              </div>
+
+              {/* ID Body */}
+              <div className="p-5 flex items-center gap-4">
+                <img src="/profile.png" alt="Simon Chusseau" className="w-20 h-20 rounded-full object-cover border border-gray-200" />
+                <div>
+                  <h3 className="font-bold text-xl text-black font-garamond-bold">Simon Chusseau</h3>
+                  <p className="text-gray-400 font-garamond-regular text-sm mt-0.5">Founder @ Mandat & CygnisAI</p>
                 </div>
               </div>
             </div>
+          ) : (
+            <div className="h-4" />
+          )}
 
+        </div>
+
+        {/* Right Side — Overlapping iPhone & Mac mockups from Portfolio2021 */}
+        <div className="flex-1 w-full max-w-md md:max-w-xl relative flex justify-center py-12 select-none">
+          {/* Overlapping Mac mockup base */}
+          <div className="relative w-full aspect-[16/10] max-w-[480px]">
+            <img src="/macLw.png" alt="Mac mock" className="w-full h-auto drop-shadow-2xl hover:rotate-[-1deg] hover:scale-[1.015] transition-transform duration-500" />
+
+            {/* Overlapping floating iPhone mock on the left */}
+            <div className="absolute -left-12 -bottom-6 w-[42%] z-10">
+              <img src="/iphoneAnonimo.png" alt="Iphone mock" className="w-full h-auto drop-shadow-xl hover:rotate-[2deg] hover:scale-[1.025] transition-transform duration-500" />
+            </div>
+
+            {/* cartoon helper text above */}
+            <span className="absolute -top-12 -left-12 font-cartoon text-orange-500 text-2xl rotate-[-5deg] hidden md:inline-block">
+              More of such interesting projects ~
+            </span>
           </div>
         </div>
-      </div>
 
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce opacity-60">
-        <ArrowDown className="w-5 h-5 text-primary" />
       </div>
     </section>
   );
