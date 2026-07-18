@@ -2,31 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
+/*
+  Design tokens — all colors MUST be HSL.
+  Signature: dark navy base, electric blue primary, violet accent.
 */
 
 @layer base {
   :root {
-    --background: 222 47% 11%;
+    --background: 222 47% 10%;
     --foreground: 210 40% 98%;
 
-    --card: 222 47% 15%;
+    --card: 222 47% 13%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222 47% 15%;
+    --popover: 222 47% 13%;
     --popover-foreground: 210 40% 98%;
 
     --primary: 217 91% 60%;
-    --primary-foreground: 222 47% 11%;
-    
+    --primary-foreground: 222 47% 10%;
+
     --primary-glow: 260 80% 70%;
 
-    --secondary: 217 32% 25%;
+    --secondary: 217 32% 22%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 217 32% 20%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 217 32% 18%;
+    --muted-foreground: 215 20% 58%;
 
     --accent: 260 80% 65%;
     --accent-foreground: 210 40% 98%;
@@ -34,22 +35,22 @@ All colors MUST be HSL.
     --destructive: 0 63% 50%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217 32% 25%;
-    --input: 217 32% 25%;
+    --border: 217 32% 20%;
+    --input: 217 32% 20%;
     --ring: 217 91% 60%;
 
     --radius: 0.75rem;
 
     /* Gradients */
     --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(260 80% 70%) 100%);
-    --gradient-card: linear-gradient(135deg, hsl(222 47% 15% / 0.8) 0%, hsl(222 47% 18% / 0.6) 100%);
-    --gradient-hero: radial-gradient(ellipse at top, hsl(217 91% 60% / 0.15), transparent 50%), radial-gradient(ellipse at bottom right, hsl(260 80% 70% / 0.15), transparent 50%);
+    --gradient-card: linear-gradient(135deg, hsl(222 47% 13% / 0.9) 0%, hsl(222 47% 16% / 0.7) 100%);
+    --gradient-hero: radial-gradient(ellipse at 30% 20%, hsl(217 91% 60% / 0.12), transparent 55%),
+                     radial-gradient(ellipse at 70% 80%, hsl(260 80% 70% / 0.10), transparent 55%);
 
     /* Shadows */
-    --shadow-glow: 0 0 40px hsl(217 91% 60% / 0.3), 0 0 80px hsl(260 80% 70% / 0.2);
-    --shadow-card: 0 10px 40px -10px hsl(0 0% 0% / 0.5);
-    
-    /* Animations */
+    --shadow-glow: 0 0 40px hsl(217 91% 60% / 0.25), 0 0 80px hsl(260 80% 70% / 0.15);
+    --shadow-card: 0 10px 40px -10px hsl(0 0% 0% / 0.6);
+
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
@@ -63,35 +64,86 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
-  
+
   html {
     scroll-behavior: smooth;
   }
 }
 
 @layer utilities {
+  /* Gradient text */
   .text-gradient {
     background: var(--gradient-primary);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-  
+
+  /* Cards */
+  .bg-gradient-card {
+    background: var(--gradient-card);
+  }
+
+  /* Hero bg */
+  .bg-gradient-hero {
+    background: var(--gradient-hero);
+  }
+
+  /* Primary button gradient */
+  .bg-gradient-primary {
+    background: var(--gradient-primary);
+  }
+
+  /* Glow shadow */
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  /* Hover glow for buttons */
+  .hover\:shadow-glow:hover {
+    box-shadow: var(--shadow-glow);
+  }
+
+  /* Animations */
   .animate-float {
     animation: float 6s ease-in-out infinite;
   }
-  
+
   .animate-glow {
     animation: glow 3s ease-in-out infinite alternate;
   }
-  
+
+  .animate-fade-in {
+    animation: fadeIn 0.8s ease-out both;
+  }
+
   @keyframes float {
     0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-20px); }
+    50% { transform: translateY(-12px); }
   }
-  
+
   @keyframes glow {
     from { filter: drop-shadow(0 0 20px hsl(217 91% 60% / 0.3)); }
     to { filter: drop-shadow(0 0 40px hsl(260 80% 70% / 0.5)); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Subtle grain on background */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
   }
 }
