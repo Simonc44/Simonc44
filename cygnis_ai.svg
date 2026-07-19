@@ -1,1 +1,38 @@
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="size-8 text-primary"><path d="M12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3ZM12 19C8.13401 19 5 15.866 5 12C5 8.13401 8.13401 5 12 5C15.866 5 19 8.13401 19 12C19 15.866 15.866 19 12 19Z" fill="currentColor" opacity="0.2"></path><path d="M16.5414 10.3541C15.8617 9.68729 14.974 9.24988 14 9.10241V12.1873L16.5414 10.3541Z" fill="currentColor"></path><path d="M12.0001 14.8129L9.45874 16.6461C10.1384 17.3129 11.0261 17.7503 12.0001 17.8978V14.8129Z" fill="currentColor"></path><path d="M12.0001 6.10254C12.974 6.24995 13.8617 6.68735 14.5414 7.35413L12.0001 9.18734V6.10254Z" fill="currentColor"></path><path d="M15.5 12C15.5 13.933 13.933 15.5 12 15.5C10.067 15.5 8.5 13.933 8.5 12C8.5 10.067 10.067 8.5 12 8.5C13.933 8.5 15.5 10.067 15.5 12Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="size-7 text-primary">
+  <defs>
+    <linearGradient id="cygnis-grad" x1="12" y1="3" x2="12" y2="21" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7C3AED">
+      </stop>
+      <stop offset="1" stop-color="#4F46E5">
+      </stop>
+    </linearGradient>
+    <filter id="cygnis-shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="0.8">
+      </feGaussianBlur>
+      <feOffset dx="0" dy="1.2" result="offsetblur">
+      </feOffset>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.4">
+        </feFuncA>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode>
+        </feMergeNode>
+        <feMergeNode in="SourceGraphic">
+        </feMergeNode>
+      </feMerge>
+    </filter>
+  </defs>
+  <g filter="url(#cygnis-shadow)">
+    <path d="M12 3C7.03 3 3 7.03 3 12C3 16.97 7.03 21 12 21C16.97 21 21 16.97 21 12C21 7.03 16.97 3 12 3ZM12 19.2C8.02 19.2 4.8 15.98 4.8 12C4.8 8.02 8.02 4.8 12 4.8C15.98 4.8 19.2 8.02 19.2 12C19.2 15.98 15.98 19.2 12 19.2Z" fill="url(#cygnis-grad)" opacity="0.5">
+    </path>
+    <path d="M19.2 12C19.2 10.5 17.5 9.5 14.5 9.5V14.5C17.5 14.5 19.2 13.5 19.2 12Z" fill="url(#cygnis-grad)">
+    </path>
+    <path d="M12 19.2C10.5 19.2 9.5 17.5 9.5 14.5L14.5 14.5C14.5 17.5 13.5 19.2 12 19.2Z" fill="url(#cygnis-grad)">
+    </path>
+    <path d="M12 4.8C13.5 4.8 14.5 6.5 14.5 9.5H9.5C9.5 6.5 10.5 4.8 12 4.8Z" fill="url(#cygnis-grad)">
+    </path>
+    <circle cx="12" cy="12" r="3.2" stroke="url(#cygnis-grad)" stroke-width="2.2" stroke-linecap="round">
+    </circle>
+  </g>
+</svg>
