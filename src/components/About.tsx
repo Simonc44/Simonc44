@@ -7,13 +7,28 @@ const About = () => {
     <section id="about" className="py-24 px-6 md:px-12 bg-white flex items-center border-t border-[#ededed]">
       <div className="container max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12">
 
-        {/* Left Side — iPhone loop GIF */}
-        <div className="flex-1 max-w-sm flex justify-center">
-          <img
-            src="/instaLoop.gif"
-            alt="Iphone Loop GIF"
-            className="w-[80%] max-w-[280px] object-contain drop-shadow-xl rotate-[3deg] hover:rotate-[2deg] hover:scale-[1.025] transition-transform duration-500 cursor-pointer"
-          />
+        {/* Left Side — Premium CSS iPhone mockup showing Simon's work */}
+        <div className="flex-1 max-w-sm flex justify-center py-6 select-none">
+          <div className="w-[80%] max-w-[260px] aspect-[9/19.5] bg-slate-950 rounded-[32px] p-1.5 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.3)] border-[3px] border-slate-800 rotate-[3deg] hover:rotate-[1deg] hover:scale-[1.025] transition-transform duration-500">
+            <div className="w-full h-full bg-[#050505] rounded-[26px] overflow-hidden flex flex-col relative border border-slate-900">
+              {/* Dynamic Island Notch */}
+              <div className="absolute top-1 left-1/2 -translate-x-1/2 w-1/3 h-3.5 bg-black rounded-full z-20 flex items-center justify-center">
+                <div className="w-1 h-1 bg-[#1a1a1a] rounded-full absolute right-2" />
+              </div>
+              {/* Status Bar */}
+              <div className="h-5 bg-black px-3 pt-1 flex justify-between items-center text-[7px] text-white font-semibold select-none z-10">
+                <span>09:41</span>
+                <div className="flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
+                  <span>5G</span>
+                </div>
+              </div>
+              {/* App Screen Content displaying CygnisAI */}
+              <div className="flex-1 overflow-hidden relative bg-black">
+                <img src="/cygnis-chat.png" alt="Cygnis Chat Screen" className="w-full h-full object-cover object-top" />
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Right Side — Biography and social QR / profile window */}

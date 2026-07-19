@@ -76,19 +76,56 @@ const Hero = () => {
 
         </div>
 
-        {/* Right Side — Overlapping iPhone & Mac mockups from Portfolio2021 */}
+        {/* Right Side — Overlapping Premium CSS-based device mockups of Simon's real projects */}
         <div className="flex-1 w-full max-w-md md:max-w-xl relative flex justify-center py-12 select-none">
-          {/* Overlapping Mac mockup base */}
-          <div className="relative w-full aspect-[16/10] max-w-[480px]">
-            <img src="/macLw.png" alt="Mac mock" className="w-full h-auto drop-shadow-2xl hover:rotate-[-1deg] hover:scale-[1.015] transition-transform duration-500" />
+          {/* Overlapping CSS MacBook style frame */}
+          <div className="relative w-full aspect-[16/10] max-w-[480px] bg-slate-900 rounded-2xl p-1.5 pb-3.5 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] hover:rotate-[-1deg] hover:scale-[1.015] transition-transform duration-500">
+            {/* Display screen */}
+            <div className="w-full h-full bg-black rounded-lg overflow-hidden flex flex-col border border-slate-800">
+              {/* Browser window top bar */}
+              <div className="bg-[#121212] px-3 py-2 border-b border-slate-800 flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#FE5E58]" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#FEBD2C]" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#27C841]" />
+                </div>
+                <div className="bg-[#1e1e1e] text-[9px] text-gray-400 px-4 py-0.5 rounded-md w-1/2 text-center truncate font-mono select-none">
+                  cygnis-ai.fr
+                </div>
+                <div className="w-10" />
+              </div>
+              {/* Screenshot body */}
+              <div className="flex-1 overflow-hidden relative bg-black">
+                <img src="/cygnis-home.png" alt="CygnisAI" className="w-full h-full object-cover object-top" />
+              </div>
+            </div>
+            {/* Keyboard hinge aesthetic */}
+            <div className="absolute -bottom-1 left-4 right-4 h-1.5 bg-slate-700 rounded-b" />
 
-            {/* Overlapping floating iPhone mock on the left */}
-            <div className="absolute -left-12 -bottom-6 w-[42%] z-10">
-              <img src="/iphoneAnonimo.png" alt="Iphone mock" className="w-full h-auto drop-shadow-xl hover:rotate-[2deg] hover:scale-[1.025] transition-transform duration-500" />
+            {/* CSS-based iPhone Mockup overlapping */}
+            <div className="absolute -left-12 -bottom-6 w-[42%] z-10 aspect-[9/19.5] bg-slate-950 rounded-[32px] p-1.5 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4)] border-[3px] border-slate-800 hover:rotate-[2deg] hover:scale-[1.025] transition-transform duration-500">
+              <div className="w-full h-full bg-[#050505] rounded-[26px] overflow-hidden flex flex-col relative border border-slate-900">
+                {/* Dynamic Island Notch */}
+                <div className="absolute top-1 left-1/2 -translate-x-1/2 w-1/3 h-3.5 bg-black rounded-full z-20 flex items-center justify-center">
+                  <div className="w-1 h-1 bg-[#1a1a1a] rounded-full absolute right-2" />
+                </div>
+                {/* Status Bar */}
+                <div className="h-5 bg-black px-3 pt-1 flex justify-between items-center text-[7px] text-white font-semibold select-none z-10">
+                  <span>09:41</span>
+                  <div className="flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
+                    <span>5G</span>
+                  </div>
+                </div>
+                {/* App Screen Content */}
+                <div className="flex-1 overflow-hidden relative bg-black">
+                  <img src="/cygnis-chat.png" alt="Cygnis Chat" className="w-full h-full object-cover object-top" />
+                </div>
+              </div>
             </div>
 
             {/* cartoon helper text above */}
-            <span className="absolute -top-12 -left-12 font-cartoon text-orange-500 text-2xl rotate-[-5deg] hidden md:inline-block">
+            <span className="absolute -top-8 -right-4 font-cartoon text-orange-500 text-xl md:text-2xl rotate-[5deg] hidden md:inline-block z-20">
               More of such interesting projects ~
             </span>
           </div>
