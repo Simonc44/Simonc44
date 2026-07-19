@@ -36,13 +36,33 @@ I'm a passionate developer and the founder of **Mandat** and **CygnisAI**. I bui
 
 ### My Tech Stack
 
-![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)
-![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
-![Google Gemini](https://img.shields.io/badge/Google_Gemini-4D88FF?style=for-the-badge&logo=google-gemini&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
-
+<a href="https://nextjs.org" target="_blank">
+  <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white" style="border-radius: 12px;" alt="Next.js" />
+</a>
+<a href="https://react.dev" target="_blank">
+  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" style="border-radius: 12px;" alt="React" />
+</a>
+<a href="https://www.typescriptlang.org" target="_blank">
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" style="border-radius: 12px;" alt="TypeScript" />
+</a>
+<a href="https://tailwindcss.com" target="_blank">
+  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" style="border-radius: 12px;" alt="Tailwind CSS" />
+</a>
+<a href="https://deepmind.google/technologies/gemini/" target="_blank">
+  <img src="https://img.shields.io/badge/Google_Gemini-4D88FF?style=for-the-badge&logo=google-gemini&logoColor=white" style="border-radius: 12px;" alt="Google Gemini" />
+</a>
+<a href="https://firebase.google.com" target="_blank">
+  <img src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black" style="border-radius: 12px;" alt="Firebase" />
+</a>
+<a href="https://www.docker.com" target="_blank">
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" style="border-radius: 12px;" alt="Docker" />
+</a>
+<a href="https://www.python.org" target="_blank">
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" style="border-radius: 12px;" alt="Python" />
+</a>
+<a href="https://www.debian.org" target="_blank">
+  <img src="https://img.shields.io/badge/Debian-A80030?style=for-the-badge&logo=debian&logoColor=white" style="border-radius: 12px;" alt="Debian" />
+</a>
 ---
 
 > "The best way to predict the future is to build it."
