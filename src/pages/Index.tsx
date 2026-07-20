@@ -4,11 +4,10 @@ import About from "@/components/About";
 import GitHubTerminal from "@/components/GitHubTerminal";
 import DraggableSkills from "@/components/DraggableSkills";
 import Projects from "@/components/Projects";
-import Contact from "@/components/Contact";
-import { Github, Linkedin } from "lucide-react";
+import { Github, Linkedin, Instagram } from "lucide-react";
 
 const Index = () => (
-  <div className="min-h-screen">
+  <div className="min-h-screen bg-white">
     <Navigation />
     <main>
       <Hero />
@@ -16,23 +15,51 @@ const Index = () => (
       <DraggableSkills />
       <GitHubTerminal />
       <Projects />
-      <Contact />
     </main>
-    <footer className="py-10 border-t border-primary/10">
-      <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-        <p className="font-mono">
-          &copy; {new Date().getFullYear()}{" "}
-          <span className="text-foreground font-semibold">Simon Chusseau</span>
-          {" "}— Built with passion &amp; &#9749;
-        </p>
-        <div className="flex items-center gap-4">
-          <a href="https://github.com/Simonc44" target="_blank" rel="noopener noreferrer"
-            className="hover:text-primary transition-colors flex items-center gap-1.5">
-            <Github className="w-4 h-4" /> GitHub
+
+    {/* Custom white footer matching AVIVASHISHTA29's Footer.js style, optimized for Simon Chusseau */}
+    <footer id="socials" className="py-12 px-6 md:px-12 bg-white border-t border-[#ededed]">
+      <div className="container max-w-6xl mx-auto">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-6">
+          <div className="text-center md:text-left">
+            <h2 className="text-3xl font-bold font-garamond-bold text-black flex items-center justify-center md:justify-start">
+              Simon Chusseau <span className="text-red-500 ml-1 font-bold font-garamond-bold">.</span>
+            </h2>
+            <p className="font-cartoon text-2xl text-red-500 rotate-[-1deg] mt-1">
+              Until Next Time :p
+            </p>
+          </div>
+
+          <p className="text-gray-400 font-garamond-bold font-semibold text-sm">
+            Designed and Developed by Me © {new Date().getFullYear()}
+          </p>
+        </div>
+
+        {/* Social Links on separate row, aligned right */}
+        <div className="flex items-center justify-center md:justify-end gap-6 pt-6 border-t border-[#ededed]/50">
+          <a
+            href="https://www.instagram.com/simonchusseau/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-400 hover:text-black transition-colors p-2 hover:bg-gray-100 rounded-lg"
+          >
+            <Instagram className="w-6 h-6" />
           </a>
-          <a href="https://www.linkedin.com/in/simon-chusseau-91541a378/" target="_blank" rel="noopener noreferrer"
-            className="hover:text-primary transition-colors flex items-center gap-1.5">
-            <Linkedin className="w-4 h-4" /> LinkedIn
+          <a
+            href="https://www.linkedin.com/in/simon-chusseau-91541a378/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-400 hover:text-black transition-colors p-2 hover:bg-gray-100 rounded-lg"
+          >
+            <Linkedin className="w-6 h-6" />
+          </a>
+          <a
+            href="https://github.com/Simonc44"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-400 hover:text-black transition-colors p-2 hover:bg-gray-100 rounded-lg"
+          >
+            <Github className="w-6 h-6" />
           </a>
         </div>
       </div>

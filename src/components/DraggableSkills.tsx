@@ -1,11 +1,11 @@
 import { useRef, useState, useCallback } from "react";
 
 const SKILLS: [string, string][] = [
-  ["Front-End",    "React, Next.js, TanStack, Tailwind CSS"],
-  ["Back-End",     "Node.js, Hono, Drizzle ORM, SQLite"],
-  ["AI / LLMs",   "Groq, Gemini, LangChain, Vercel AI SDK"],
-  ["Languages",   "TypeScript, Python, JavaScript"],
-  ["DevOps",      "Vercel, GitHub Actions, Docker, Turso"],
+  ["Front-End", "React, Next.js, TanStack, Tailwind CSS"],
+  ["Back-End", "Node.js, Hono, Drizzle ORM, SQLite"],
+  ["AI / LLMs", "Groq, Gemini, LangChain, Vercel AI SDK"],
+  ["Languages", "TypeScript, Python, JavaScript"],
+  ["DevOps", "Vercel, GitHub Actions, Docker, Turso"],
 ];
 
 const GRADIENTS = [
@@ -53,70 +53,85 @@ export default function DraggableSkills() {
   }, []);
 
   return (
-    <section id="skills" className="py-24 px-4">
-      <div className="container max-w-5xl mx-auto">
-        <p className="text-sm font-mono tracking-widest uppercase text-center mb-3" style={{ color: "hsl(217 91% 60% / 0.7)" }}>
-          Variable Skill Set
-        </p>
-        <h2 className="text-4xl md:text-5xl font-bold mb-4 text-center">
-          My Skills<strong style={{ color: "orange" }}>.</strong>
-        </h2>
-        <p className="text-center mb-2" style={{ color: "hsl(215 20% 58%)", fontStyle: "italic" }}>
-          PS. My skill set is literally variable — try dragging and rearranging one of the skills :p
-        </p>
+    <section id="skills" className="py-24 px-6 md:px-12 bg-white border-t border-[#ededed]">
+      <div className="container max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
 
-        <div
-          className="relative mx-auto select-none"
-          style={{ width: 460, height: SKILLS.length * ITEM_H }}
-          onPointerMove={onPointerMove}
-          onPointerUp={endDrag}
-          onPointerLeave={endDrag}
-        >
-          {order.map((skillIdx, rank) => {
-            const isDragging = livePos?.idx === skillIdx;
-            const dy = isDragging ? livePos!.dy : 0;
-            const visualY = rank * ITEM_H + dy;
+        {/* Left column: Draggable List */}
+        <div className="flex-1 w-full max-w-lg">
+          <p className="text-sm font-mono tracking-widest uppercase text-left mb-3 text-gray-400">
+            Variable Skill Set
+          </p>
+          <h2 className="text-4xl font-bold font-garamond-bold text-black mb-6 flex items-center">
+            My Skills <span className="text-orange-500 ml-1 font-bold font-garamond-bold">.</span>
+          </h2>
 
-            return (
-              <div
-                key={skillIdx}
-                translate="no"
-                onPointerDown={(e) => {
-                  e.currentTarget.setPointerCapture(e.pointerId);
-                  startDrag(skillIdx, e.clientY);
-                }}
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  height: ITEM_H - 8,
-                  transform: `translate3d(0, ${visualY}px, 0) scale(${isDragging ? 1.04 : 1})`,
-                  zIndex: isDragging ? 10 : 1,
-                  transition: isDragging ? "none" : "transform 0.2s ease",
-                  borderRadius: 12,
-                  background: GRADIENTS[skillIdx % GRADIENTS.length],
-                  boxShadow: isDragging
-                    ? "rgba(0,0,0,0.3) 0px 16px 40px 0px"
-                    : "rgba(0,0,0,0.12) 0px 4px 12px 0px",
-                  display: "flex",
-                  alignItems: "center",
-                  paddingLeft: 28,
-                  cursor: "grab",
-                  color: "#fff",
-                  fontSize: 16,
-                  fontWeight: 600,
-                  userSelect: "none",
-                }}
-              >
-                {SKILLS[skillIdx][0]}
-                <span style={{ fontWeight: 400, opacity: 0.85, marginLeft: 8, fontSize: 13 }}>
-                  — {SKILLS[skillIdx][1]}
-                </span>
-              </div>
-            );
-          })}
+          <div
+            className="relative select-none w-full max-w-[450px]"
+            style={{ height: SKILLS.length * ITEM_H }}
+            onPointerMove={onPointerMove}
+            onPointerUp={endDrag}
+            onPointerLeave={endDrag}
+          >
+            {order.map((skillIdx, rank) => {
+              const isDragging = livePos?.idx === skillIdx;
+              const dy = isDragging ? livePos!.dy : 0;
+              const visualY = rank * ITEM_H + dy;
+
+              return (
+                <div
+                  key={skillIdx}
+                  translate="no"
+                  onPointerDown={(e) => {
+                    e.currentTarget.setPointerCapture(e.pointerId);
+                    startDrag(skillIdx, e.clientY);
+                  }}
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: ITEM_H - 8,
+                    transform: `translate3d(0, ${visualY}px, 0) scale(${isDragging ? 1.04 : 1})`,
+                    zIndex: isDragging ? 10 : 1,
+                    transition: isDragging ? "none" : "transform 0.2s ease",
+                    borderRadius: 12,
+                    background: GRADIENTS[skillIdx % GRADIENTS.length],
+                    boxShadow: isDragging
+                      ? "rgba(0,0,0,0.3) 0px 16px 40px 0px"
+                      : "rgba(0,0,0,0.12) 0px 4px 12px 0px",
+                    display: "flex",
+                    alignItems: "center",
+                    paddingLeft: 28,
+                    cursor: "grab",
+                    color: "#fff",
+                    fontSize: 16,
+                    fontWeight: 600,
+                    userSelect: "none",
+                  }}
+                  className="font-garamond-bold"
+                >
+                  {SKILLS[skillIdx][0]}
+                  <span className="font-garamond-regular" style={{ fontWeight: 400, opacity: 0.85, marginLeft: 8, fontSize: 13 }}>
+                    — {SKILLS[skillIdx][1]}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
         </div>
+
+        {/* Right column: Notepad image and cartoon notes */}
+        <div className="flex-1 w-full max-w-sm flex flex-col items-center">
+          <img
+            src="/notes.png"
+            alt="Notepad note"
+            className="w-full h-auto max-w-[340px] drop-shadow-md border border-gray-200 rounded-lg hover:rotate-[-1deg] hover:scale-[1.005] transition-transform duration-500"
+          />
+          <p className="font-cartoon text-2xl text-orange-500 text-center mt-6 max-w-xs leading-snug">
+            PS. My Skill set is Literally Variable, Try Dragging and Rearranging one of the Skills :p
+          </p>
+        </div>
+
       </div>
     </section>
   );
