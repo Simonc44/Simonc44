@@ -25,7 +25,6 @@ const Index = () => (
           <p className="font-mono">
             &copy; {new Date().getFullYear()}{" "}
             <span className="text-foreground font-semibold">Simon Chusseau</span>
-            {" "}&middot; Designed &amp; built with passion &amp; &#9749;
           </p>
         </FadeIn>
         <FadeIn direction="none">

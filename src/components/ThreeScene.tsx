@@ -1,73 +1,153 @@
 import { useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Float } from "@react-three/drei";
+import {
+  Float,
+  Environment,
+  MeshTransmissionMaterial,
+  MeshDistortMaterial,
+} from "@react-three/drei";
+import {
+  EffectComposer,
+  Bloom,
+  Vignette,
+  Noise,
+} from "@react-three/postprocessing";
 import { useReducedMotion } from "framer-motion";
 import * as THREE from "three";
 
-type ShapeKind =
-  | "torusKnot"
-  | "icosahedron"
-  | "octahedron"
-  | "sphere"
-  | "torus"
-  | "dodecahedron";
-
-interface ShapeProps {
-  position: [number, number, number];
-  color: string;
-  scale?: number;
-  speed?: number;
-  geometry: ShapeKind;
-}
-
-// Lookup table for geometry JSX, matching the project's table-driven style.
-const GEOMETRIES: Record<ShapeKind, React.ReactNode> = {
-  torusKnot: <torusKnotGeometry args={[0.6, 0.2, 64, 16]} />,
-  icosahedron: <icosahedronGeometry args={[0.8, 0]} />,
-  octahedron: <octahedronGeometry args={[0.7, 0]} />,
-  sphere: <sphereGeometry args={[0.8, 32, 32]} />,
-  torus: <torusGeometry args={[0.6, 0.2, 16, 32]} />,
-  dodecahedron: <dodecahedronGeometry args={[0.7, 0]} />,
-};
-
 /**
- * One floating 3D shape.
- * - Rotates slowly over time
- * - Wraps in <Float> from drei for organic bobbing (skipped under reduced motion)
- * - Uses a cheap meshStandardMaterial colored by the scene's lights
+ * Hero focal point — iridescent crystal icosahedron using drei's
+ * MeshTransmissionMaterial for a premium glass refraction effect.
+ * Slow rotation + subtle breathing scale.
  */
-const Shape = ({ position, color, scale = 1, speed = 1, geometry }: ShapeProps) => {
+const HeroShard = () => {
   const ref = useRef<THREE.Mesh>(null!);
   const shouldReduceMotion = useReducedMotion();
 
   useFrame((state) => {
     if (shouldReduceMotion || !ref.current) return;
     const t = state.clock.elapsedTime;
-    ref.current.rotation.x = t * 0.18 * speed;
-    ref.current.rotation.z = t * 0.12 * speed;
+    ref.current.rotation.x = t * 0.1;
+    ref.current.rotation.y = t * 0.05;
+    // Subtle "breathing" scale for an organic feel
+    ref.current.scale.setScalar(1 + Math.sin(t * 0.5) * 0.04);
   });
 
   const mesh = (
-    <mesh ref={ref} position={position} scale={scale}>
-      {GEOMETRIES[geometry]}
-      <meshStandardMaterial
-        color={color}
-        roughness={0.3}
-        metalness={0.55}
-        emissive={color}
-        emissiveIntensity={0.25}
+    <mesh ref={ref} position={[0, -3, -7]}>
+      <icosahedronGeometry args={[1.4, 0]} />
+      <MeshTransmissionMaterial
+        transmission={1}
+        roughness={0.1}
+        thickness={2}
+        ior={1.2}
+        chromaticAberration={0.06}
+        resolution={256}
+        backside
+        color="#c4b5fd"
       />
     </mesh>
   );
 
   return shouldReduceMotion ? mesh : (
-    <Float speed={speed} rotationIntensity={1.2} floatIntensity={2}>
+    <Float speed={1.5} floatIntensity={1} rotationIntensity={0}>
       {mesh}
     </Float>
   );
 };
 
-/** Subtle parallax: the camera drifts slightly toward the mouse. Disabled under reduced motion. */
+/**
+ * Organic accent — wobbly coral liquid sphere. Catches the eye on the
+ * lower-right with a continuously morphing surface.
+ */
+const OrganicBlob = () => {
+  const ref = useRef<THREE.Mesh>(null!);
+  const shouldReduceMotion = useReducedMotion();
+
+  useFrame((state) => {
+    if (shouldReduceMotion || !ref.current) return;
+    const t = state.clock.elapsedTime;
+    ref.current.rotation.x = t * 0.15;
+    ref.current.rotation.y = t * 0.1;
+  });
+
+  const mesh = (
+    <mesh ref={ref} position={[4.5, -2.5, -3]}>
+      <sphereGeometry args={[0.7, 64, 64]} />
+      <MeshDistortMaterial
+        color="#f472b6"
+        metalness={0.85}
+        roughness={0.2}
+        speed={2}
+        distort={0.4}
+      />
+    </mesh>
+  );
+
+  return shouldReduceMotion ? mesh : (
+    <Float speed={2} floatIntensity={2} rotationIntensity={1}>
+      {mesh}
+    </Float>
+  );
+};
+
+/**
+ * Polished violet torus — top-right accent, sharp metallic look.
+ */
+const TorusAccent = () => {
+  const ref = useRef<THREE.Mesh>(null!);
+  const shouldReduceMotion = useReducedMotion();
+
+  useFrame((state) => {
+    if (shouldReduceMotion || !ref.current) return;
+    const t = state.clock.elapsedTime;
+    ref.current.rotation.x = t * 0.2;
+    ref.current.rotation.z = t * 0.15;
+  });
+
+  const mesh = (
+    <mesh ref={ref} position={[5.5, 3, -4]}>
+      <torusGeometry args={[0.5, 0.15, 16, 32]} />
+      <meshStandardMaterial color="#a78bfa" metalness={0.9} roughness={0.1} />
+    </mesh>
+  );
+
+  return shouldReduceMotion ? mesh : (
+    <Float speed={1} floatIntensity={1.5} rotationIntensity={1.5}>
+      {mesh}
+    </Float>
+  );
+};
+
+/**
+ * Deep violet octahedron — top-left, far-away in depth. Adds moody
+ * shadow accent + parallax-amplified depth feel.
+ */
+const ShadowAccent = () => {
+  const ref = useRef<THREE.Mesh>(null!);
+  const shouldReduceMotion = useReducedMotion();
+
+  useFrame((state) => {
+    if (shouldReduceMotion || !ref.current) return;
+    const t = state.clock.elapsedTime;
+    ref.current.rotation.y = t * 0.1;
+  });
+
+  const mesh = (
+    <mesh ref={ref} position={[-5, 3.5, -6]}>
+      <octahedronGeometry args={[0.55, 0]} />
+      <meshStandardMaterial color="#2e1065" metalness={0.5} roughness={0.5} />
+    </mesh>
+  );
+
+  return shouldReduceMotion ? mesh : (
+    <Float speed={1} floatIntensity={2} rotationIntensity={0.5}>
+      {mesh}
+    </Float>
+  );
+};
+
+/** Subtle parallax: camera drifts slightly toward the mouse. */
 const CameraRig = () => {
   const shouldReduceMotion = useReducedMotion();
   useFrame((state) => {
@@ -92,48 +172,44 @@ const CameraRig = () => {
 const ThreeScene = () => {
   return (
     <Canvas
-      camera={{ position: [0, 0, 7], fov: 45 }}
+      camera={{ position: [0, 0, 7], fov: 40 }}
       style={{ background: "transparent", pointerEvents: "none" }}
       dpr={[1, 2]}
       gl={{ alpha: true, antialias: true }}
     >
-      <ambientLight intensity={0.45} />
-      <pointLight position={[6, 6, 5]} intensity={3} color="#a78bfa" />
-      <pointLight position={[-6, -6, 5]} intensity={2.5} color="#f472b6" />
-      <pointLight position={[0, 0, 4]} intensity={1.4} color="#ffffff" />
+      {/* HDRI lighting + reflections — drei's "city" preset fetched from CDN. */}
+      <Environment preset="city" />
 
-      {/* 4 shapes — kept compact for performance. Positioned in the corners
-          so they decorate without blocking the central text/terminal. */}
-      <Shape
-        position={[-5, 2.5, -2]}
-        color="#a78bfa"
-        scale={0.85}
-        speed={1}
-        geometry="torusKnot"
-      />
-      <Shape
-        position={[5.5, -2, -3]}
+      <ambientLight intensity={0.25} />
+      {/* Coral rim light from bottom-right */}
+      <pointLight
+        position={[5, -5, 2]}
+        intensity={5}
         color="#f472b6"
-        scale={0.7}
-        speed={1.2}
-        geometry="icosahedron"
+        distance={15}
       />
-      <Shape
-        position={[-4.5, -2.8, -1]}
+      {/* Violet highlight from top-left */}
+      <pointLight
+        position={[-5, 5, 2]}
+        intensity={4}
         color="#a78bfa"
-        scale={0.6}
-        speed={0.9}
-        geometry="octahedron"
+        distance={15}
       />
-      <Shape
-        position={[4, 2.8, -4]}
-        color="#f472b6"
-        scale={0.65}
-        speed={1.1}
-        geometry="dodecahedron"
-      />
+
+      <HeroShard />
+      <OrganicBlob />
+      <TorusAccent />
+      <ShadowAccent />
 
       <CameraRig />
+
+      {/* Premium post-processing stack. mipmapBlur is the cheap Beautiful
+          glow path; Noise + Vignette add cinematic filmic feel. */}
+      <EffectComposer disableNormalPass>
+        <Bloom luminanceThreshold={0.7} mipmapBlur intensity={0.8} />
+        <Noise opacity={0.025} />
+        <Vignette eskil={false} offset={0.15} darkness={0.7} />
+      </EffectComposer>
     </Canvas>
   );
 };
