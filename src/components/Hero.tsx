@@ -1,141 +1,167 @@
+import { motion, useReducedMotion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Github, Linkedin, Instagram, ArrowDown } from "lucide-react";
+import { FadeIn } from "@/components/animations/FadeIn";
 
-/**
- * Hero — typing animation done 100% in CSS (span::before + @keyframes animate)
- * so Google Translate never touches a React-managed text node and can't crash the tree.
- */
 const Hero = () => {
+  const shouldReduceMotion = useReducedMotion();
   const scrollTo = (id: string) => (e: React.MouseEvent) => {
     e.preventDefault();
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const socials = [
+    { href: "https://www.linkedin.com/in/simon-chusseau-91541a378/", Icon: Linkedin, label: "LinkedIn" },
+    { href: "https://www.instagram.com/simonchusseau/", Icon: Instagram, label: "Instagram" },
+    { href: "https://github.com/Simonc44", Icon: Github, label: "GitHub" },
+  ];
+
   return (
-    <section className="hero-section relative min-h-screen flex items-center overflow-hidden">
-      {/* background glows */}
+    <section className="hero-section relative min-h-screen flex items-center overflow-hidden pt-16">
+      {/* Background glows */}
       <div className="absolute inset-0 bg-gradient-hero pointer-events-none" />
-      <div className="absolute inset-0 pointer-events-none"
+      <div
+        className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse at 25% 25%, hsl(217 91% 60% / 0.13) 0%, transparent 55%), " +
-            "radial-gradient(ellipse at 75% 75%, hsl(260 80% 70% / 0.10) 0%, transparent 55%)",
+            "radial-gradient(ellipse at 25% 25%, hsl(263 70% 66% / 0.1) 0%, transparent 55%), " +
+            "radial-gradient(ellipse at 75% 75%, hsl(340 75% 60% / 0.06) 0%, transparent 55%)",
         }}
       />
 
       <div className="container relative z-10 px-4 py-24 w-full">
-        <div className="max-w-5xl mx-auto">
-          <div className="flex flex-col-reverse md:flex-row items-center gap-12 md:gap-20">
-
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col-reverse lg:flex-row items-center gap-12 lg:gap-20">
             {/* ── LEFT ── */}
-            <div className="flex-1 space-y-7 text-center md:text-left">
+            <div className="flex-1 space-y-8 text-center lg:text-left">
+              <FadeIn delay={0}>
+                <p className="text-sm font-mono tracking-widest uppercase text-muted-foreground">
+                  Hello, world! I&apos;m
+                </p>
+              </FadeIn>
 
-              <p className="text-sm font-mono tracking-widest uppercase" style={{ color: "hsl(217 91% 60% / 0.7)" }}>
-                Hello, world! I&#39;m
-              </p>
+              <FadeIn delay={0.1}>
+                <h1 className="text-6xl md:text-7xl lg:text-8xl font-serif font-medium tracking-tight leading-[1.1]">
+                  Simon
+                  <span className="text-gradient">.</span>
+                </h1>
+              </FadeIn>
 
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight">
-                Simon
-                <strong style={{ color: "hsl(217 91% 60%)" }}>.</strong>
-              </h1>
+              <FadeIn delay={0.2}>
+                <div className="hero-role-wrapper text-muted-foreground">
+                  <span
+                    className="hero-role"
+                    aria-label="Full-Stack Developer, Indie Maker, AI Builder, Open Source Contributor"
+                    translate="no"
+                  />
+                </div>
+              </FadeIn>
 
-              {/*
-                CSS-only typing animation.
-                The <span> has no text children — content comes entirely from
-                the ::before pseudo-element, so Google Translate can't touch it.
-              */}
-              <div className="hero-role-wrapper">
-                <span className="hero-role" aria-label="Full-Stack Developer, Indie Maker, AI Builder, Open Source Contributor" translate="no" />
-              </div>
-
-              <p className="text-lg leading-relaxed max-w-lg mx-auto md:mx-0" style={{ color: "hsl(215 20% 58%)" }}>
-                Founder of{" "}
-                <a
-                  href="https://cygnis-ai.vercel.app"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-semibold hover:underline underline-offset-4"
-                  style={{ color: "hsl(217 91% 60%)" }}
-                >
-                  CygnisAI
-                </a>
-                {" "}— building products that connect data and intelligence.
-                Based in France, shipping worldwide.
-              </p>
-
-              <div className="flex flex-wrap gap-3 justify-center md:justify-start">
-                <Button
-                  size="lg"
-                  className="font-semibold"
-                  style={{ background: "linear-gradient(135deg, hsl(217 91% 60%), hsl(260 80% 70%))" }}
-                  onClick={scrollTo("contact")}
-                >
-                  Connect now
-                </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-primary/40 hover:bg-primary/10"
-                  onClick={scrollTo("projects")}
-                >
-                  My Projects
-                </Button>
-              </div>
-
-              <div className="flex gap-3 justify-center md:justify-start">
-                {[
-                  { href: "https://www.linkedin.com/in/simon-chusseau-91541a378/", Icon: Linkedin, label: "LinkedIn" },
-                  { href: "https://www.instagram.com/simonchusseau/", Icon: Instagram, label: "Instagram" },
-                  { href: "https://github.com/Simonc44", Icon: Github, label: "GitHub" },
-                ].map(({ href, Icon, label }) => (
+              <FadeIn delay={0.3}>
+                <p className="text-lg md:text-xl leading-relaxed max-w-xl mx-auto lg:mx-0 text-muted-foreground">
+                  Founder of{" "}
                   <a
-                    key={label}
-                    href={href}
+                    href="https://cygnis-ai.vercel.app"
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={label}
-                    className="p-2.5 rounded-xl border border-primary/10 bg-card/60 hover:border-primary/40 hover:bg-primary/10 transition-all duration-300 hover:scale-110"
+                    className="text-foreground font-medium hover:text-primary transition-colors"
                   >
-                    <Icon className="w-5 h-5" />
-                  </a>
-                ))}
-              </div>
+                    CygnisAI
+                  </a>{" "}
+                  — building products that connect data and intelligence. Based in France, shipping worldwide.
+                </p>
+              </FadeIn>
+
+              <FadeIn delay={0.4}>
+                <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
+                  <Button
+                    size="lg"
+                    className="font-semibold bg-gradient-primary hover:shadow-glow transition-all duration-300"
+                    onClick={scrollTo("contact")}
+                  >
+                    Connect now
+                  </Button>
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="border-primary/30 hover:bg-primary/10 hover:border-primary/50 transition-all duration-300"
+                    onClick={scrollTo("projects")}
+                  >
+                    My Projects
+                  </Button>
+                </div>
+              </FadeIn>
+
+              <FadeIn delay={0.5}>
+                <div className="flex gap-3 justify-center lg:justify-start">
+                  {socials.map(({ href, Icon, label }) => (
+                    <motion.a
+                      key={label}
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={label}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="p-3 rounded-xl border border-border/60 bg-card/50 hover:border-primary/40 hover:bg-primary/5 transition-colors duration-300"
+                    >
+                      <Icon className="w-5 h-5" />
+                    </motion.a>
+                  ))}
+                </div>
+              </FadeIn>
             </div>
 
-            {/* ── RIGHT — Mac-style card like reference site ── */}
-            <div className="flex-shrink-0 w-full max-w-xs md:max-w-sm">
-              <div className="hero-card rounded-2xl overflow-hidden border border-primary/20 shadow-card transition-all duration-500 hover:border-primary/40">
-                {/* title bar */}
-                <div className="hero-card-bar flex items-center gap-2 px-4 py-3" style={{ background: "hsl(222 47% 13%)", borderBottom: "1px solid hsl(217 32% 20%)" }}>
-                  <span className="w-3 h-3 rounded-full" style={{ background: "#FE5E58" }} />
-                  <span className="w-3 h-3 rounded-full" style={{ background: "#FEBD2C" }} />
-                  <span className="w-3 h-3 rounded-full" style={{ background: "#27C841" }} />
-                  <span className="ml-auto text-xs font-mono" style={{ color: "hsl(215 20% 45%)" }}>simon@portfolio:~</span>
+            {/* ── RIGHT — Terminal card ── */}
+            <FadeIn delay={0.3} direction="left" className="flex-shrink-0 w-full max-w-md">
+              <motion.div
+                whileHover={{ y: -4 }}
+                transition={{ duration: 0.3 }}
+                className="rounded-2xl overflow-hidden border border-border/60 bg-card/80 backdrop-blur-sm shadow-card"
+              >
+                {/* Title bar */}
+                <div className="flex items-center gap-2 px-4 py-3 bg-secondary/50 border-b border-border/60">
+                  <span className="w-3 h-3 rounded-full bg-red-400/80" />
+                  <span className="w-3 h-3 rounded-full bg-amber-400/80" />
+                  <span className="w-3 h-3 rounded-full bg-emerald-400/80" />
+                  <span className="ml-auto text-xs font-mono text-muted-foreground">simon@portfolio:~</span>
                 </div>
-                {/* body */}
-                <div className="p-6 space-y-3 font-mono text-sm" style={{ background: "hsl(222 47% 11%)" }}>
-                  <p style={{ color: "hsl(217 91% 60%)" }}>$ whoami</p>
-                  <p style={{ color: "hsl(215 20% 75%)" }}>Simon Chusseau</p>
-                  <p style={{ color: "hsl(217 91% 60%)" }}>$ cat about.txt</p>
-                  <p style={{ color: "hsl(215 20% 65%)" }}>
+                {/* Body */}
+                <div className="p-6 space-y-3 font-mono text-sm">
+                  <p className="text-primary">$ whoami</p>
+                  <p className="text-foreground/90">Simon Chusseau</p>
+                  <p className="text-primary">$ cat about.txt</p>
+                  <p className="text-foreground/70 leading-relaxed">
                     🚀 Indie Maker &amp; AI Builder<br />
                     📍 France — remote worldwide<br />
                     🛠 React · TypeScript · LLMs<br />
                     🌱 Building: CygnisAI · Mandat<br />
                     ✅ Open to collabs
                   </p>
-                  <p style={{ color: "hsl(217 91% 60%)" }}>$ _<span className="hero-cursor" translate="no" /></p>
+                  <p className="text-primary">
+                    $<span className="hero-cursor" translate="no" />
+                  </p>
                 </div>
-              </div>
-            </div>
-
+              </motion.div>
+            </FadeIn>
           </div>
         </div>
       </div>
 
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce opacity-60">
-        <ArrowDown className="w-5 h-5 text-primary" />
-      </div>
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1, duration: 0.5 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+      >
+        <motion.div
+          animate={shouldReduceMotion ? false : { y: [0, 8, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          className="opacity-60"
+        >
+          <ArrowDown className="w-5 h-5 text-muted-foreground" />
+        </motion.div>
+      </motion.div>
     </section>
   );
 };

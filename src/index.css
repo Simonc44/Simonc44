@@ -3,58 +3,98 @@
 @tailwind utilities;
 
 /* ──────────────────────────────────────────
-   Design tokens — all colors MUST be HSL
-   Signature: dark navy · electric blue · violet
+   Design tokens — Elegant Dark/Light Edition
+   Signature: soft violet · warm coral · near-black
    ────────────────────────────────────────── */
 
 @layer base {
   :root {
-    --background: 222 47% 10%;
+    --background: 0 0% 100%;
+    --foreground: 240 10% 4%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 4%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 4%;
+
+    --primary: 263 70% 66%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 263 70% 66%;
+
+    --secondary: 240 5% 96%;
+    --secondary-foreground: 240 10% 4%;
+
+    --muted: 240 5% 96%;
+    --muted-foreground: 240 4% 46%;
+
+    --accent: 340 75% 60%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 63% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 240 6% 90%;
+    --input: 240 6% 90%;
+    --ring: 263 70% 66%;
+    --radius: 0.75rem;
+
+    --gradient-primary: linear-gradient(135deg, hsl(263 70% 66%) 0%, hsl(340 75% 60%) 100%);
+    --gradient-card: linear-gradient(135deg, hsl(0 0% 100% / 0.95) 0%, hsl(240 5% 98% / 0.9) 100%);
+    --gradient-hero:
+      radial-gradient(ellipse at 20% 20%, hsl(263 70% 66% / 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, hsl(340 75% 60% / 0.05) 0%, transparent 50%);
+
+    --shadow-glow: 0 0 40px hsl(263 70% 66% / 0.15), 0 0 80px hsl(340 75% 60% / 0.08);
+    --shadow-card: 0 8px 32px -8px hsl(0 0% 0% / 0.1);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dark {
+    --background: 240 20% 4%;
     --foreground: 210 40% 98%;
 
-    --card: 222 47% 13%;
+    --card: 240 17% 8%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222 47% 13%;
+    --popover: 240 17% 8%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 217 91% 60%;
-    --primary-foreground: 222 47% 10%;
-    --primary-glow: 260 80% 70%;
+    --primary: 263 70% 66%;
+    --primary-foreground: 240 20% 4%;
+    --primary-glow: 263 70% 66%;
 
-    --secondary: 217 32% 22%;
+    --secondary: 240 12% 16%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 217 32% 18%;
-    --muted-foreground: 215 20% 58%;
+    --muted: 240 10% 18%;
+    --muted-foreground: 215 20% 60%;
 
-    --accent: 260 80% 65%;
+    --accent: 340 75% 60%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 63% 50%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217 32% 20%;
-    --input: 217 32% 20%;
-    --ring: 217 91% 60%;
-    --radius: 0.75rem;
+    --border: 240 10% 18%;
+    --input: 240 10% 18%;
+    --ring: 263 70% 66%;
 
-    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(260 80% 70%) 100%);
-    --gradient-card: linear-gradient(135deg, hsl(222 47% 13% / 0.9) 0%, hsl(222 47% 16% / 0.7) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(263 70% 66%) 0%, hsl(340 75% 60%) 100%);
+    --gradient-card: linear-gradient(135deg, hsl(240 17% 8% / 0.95) 0%, hsl(240 17% 12% / 0.8) 100%);
     --gradient-hero:
-      radial-gradient(ellipse at 25% 25%, hsl(217 91% 60% / 0.13), transparent 55%),
-      radial-gradient(ellipse at 75% 75%, hsl(260 80% 70% / 0.10), transparent 55%);
+      radial-gradient(ellipse at 20% 20%, hsl(263 70% 66% / 0.12) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, hsl(340 75% 60% / 0.08) 0%, transparent 50%);
 
-    --shadow-glow: 0 0 40px hsl(217 91% 60% / 0.25), 0 0 80px hsl(260 80% 70% / 0.15);
-    --shadow-card: 0 10px 40px -10px hsl(0 0% 0% / 0.6);
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --shadow-glow: 0 0 40px hsl(263 70% 66% / 0.2), 0 0 80px hsl(340 75% 60% / 0.1);
+    --shadow-card: 0 8px 32px -8px hsl(0 0% 0% / 0.5);
   }
 }
 
 @layer base {
   * { @apply border-border; }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
   html { scroll-behavior: smooth; }
@@ -81,10 +121,7 @@
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  /* ── CSS-only cycling typing animation (Google-Translate-safe) ────────────
-     Works exactly like the reference site: span::before uses content:
-     to swap the text — React never touches a managed text node.
-  ──────────────────────────────────────────────────────────────────────── */
+  /* ── CSS-only cycling typing animation ──────────── */
   .hero-role-wrapper {
     height: 2.4rem;
     display: flex;
@@ -98,10 +135,10 @@
   .hero-role {
     font-size: 1.25rem;
     font-family: ui-monospace, "Cascadia Code", monospace;
-    color: hsl(215 20% 58%);
+    color: currentColor;
     white-space: nowrap;
     overflow: hidden;
-    border-right: 2px solid hsl(217 91% 60%);
+    border-right: 2px solid hsl(263 70% 66%);
     width: 0;
     animation:
       roleType    7s steps(30, end)  infinite,
@@ -109,7 +146,14 @@
       roleSwitch  28s step-start     infinite;
   }
 
-  /* span::before holds the text — Google Translate can't crash React */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-role {
+      width: auto;
+      border-right: none;
+      animation: none;
+    }
+  }
+
   .hero-role::before {
     content: "Full-Stack Developer";
     animation: roleContent 28s step-start infinite;
@@ -123,7 +167,6 @@
     100% { content: "Full-Stack Developer"; }
   }
 
-  /* Expand / collapse the box to simulate typing */
   @keyframes roleType {
     0%   { width: 0; }
     40%  { width: 22ch; }
@@ -133,16 +176,15 @@
   }
 
   @keyframes roleBlink {
-    0%, 100% { border-color: hsl(217 91% 60%); }
+    0%, 100% { border-color: hsl(263 70% 66%); }
     50%       { border-color: transparent; }
   }
 
-  /* Blinking cursor after the prompt */
   .hero-cursor {
     display: inline-block;
     width: 8px;
     height: 1em;
-    background: hsl(217 91% 60%);
+    background: hsl(263 70% 66%);
     vertical-align: middle;
     animation: cursorBlink 1s step-end infinite;
     margin-left: 2px;
@@ -159,7 +201,7 @@
     inset: 0;
     pointer-events: none;
     z-index: 0;
-    opacity: 0.025;
+    opacity: 0.02;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 }
