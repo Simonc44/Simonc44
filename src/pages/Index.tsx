@@ -7,9 +7,14 @@ import TechStack from "@/components/TechStack";
 import GitHubTerminal from "@/components/GitHubTerminal";
 import Projects from "@/components/Projects";
 import Contact from "@/components/Contact";
+import InteractiveGradientBg from "@/components/InteractiveGradientBg";
 
 const Index = () => (
-  <div className="min-h-screen bg-background">
+  <div className="min-h-screen bg-background relative">
+    {/* Fixed full-page mesh gradient background — z-[-1] so it sits
+        beneath every section without intercepting pointer events. */}
+    <InteractiveGradientBg />
+
     <Navigation />
     <main>
       <Hero />
@@ -19,7 +24,7 @@ const Index = () => (
       <Projects />
       <Contact />
     </main>
-    <footer className="py-10 border-t border-white/[0.06] bg-card/[0.04]">
+    <footer className="py-10 border-t border-white/[0.06] bg-card/[0.04] relative z-10">
       <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
         <FadeIn direction="none">
           <p className="font-mono">
@@ -37,8 +42,7 @@ const Index = () => (
               rel="noopener noreferrer"
               className="hover:text-primary transition-colors flex items-center gap-1.5"
             >
-              <Github className="w-4 h-4" />
-              GitHub
+              <Github className="w-4 h-4" /> GitHub
             </a>
             <a
               href="https://www.linkedin.com/in/simon-chusseau-91541a378/"
@@ -46,8 +50,7 @@ const Index = () => (
               rel="noopener noreferrer"
               className="hover:text-primary transition-colors flex items-center gap-1.5"
             >
-              <Linkedin className="w-4 h-4" />
-              LinkedIn
+              <Linkedin className="w-4 h-4" /> LinkedIn
             </a>
           </div>
         </FadeIn>

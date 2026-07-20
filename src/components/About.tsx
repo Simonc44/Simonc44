@@ -3,12 +3,24 @@ import SectionHeader from "@/components/primitives/SectionHeader";
 import BentoCard from "@/components/primitives/BentoCard";
 import GlowBadge from "@/components/primitives/GlowBadge";
 import DraggableSkills from "@/components/DraggableSkills";
+import ChatBubbles, {
+  type ChatMessage,
+} from "@/components/primitives/ChatBubbles";
 import ThreeScene from "@/components/ThreeScene";
 
 const CURRENTLY = [
-  { label: "Building CygnisAI & Mandat (civic tech)", tone: "primary" as const },
-  { label: "Exploring SaaS ideas via Reddit research", tone: "primary" as const },
-  { label: "Learning advanced LLM orchestration", tone: "primary" as const },
+  {
+    label: "Building CygnisAI & Mandat (civic tech)",
+    tone: "primary" as const,
+  },
+  {
+    label: "Exploring SaaS ideas via Reddit research",
+    tone: "primary" as const,
+  },
+  {
+    label: "Learning advanced LLM orchestration",
+    tone: "primary" as const,
+  },
   { label: "Open to collabs & freelance", tone: "live" as const },
 ];
 
@@ -27,6 +39,36 @@ const STEPS = [
     id: "03",
     title: "Ship",
     body: "Vercel previews, edge functions, analytics wired in from day one. Public by default.",
+  },
+];
+
+/** Mini-conversation surfaced inside the About bento — modeled after the
+ *  Framer "XChatWindow" template. Recruiter/user side on the left, me on
+ *  the right. */
+const CHAT_PREVIEW: ChatMessage[] = [
+  {
+    id: "c1",
+    side: "left",
+    name: "Recruiter",
+    body: "Hey Simon, your portfolio caught my eye — what are you currently shipping?",
+  },
+  {
+    id: "c2",
+    side: "right",
+    name: "Me",
+    body: "Two products live on Vercel: CygnisAI (AI assistant suite) and Mandat (civic-tech workspace).",
+  },
+  {
+    id: "c3",
+    side: "left",
+    name: "Recruiter",
+    body: "Nice. Are you open to a contract?",
+  },
+  {
+    id: "c4",
+    side: "right",
+    name: "Me",
+    body: "Yes — for short, well-scoped AI or full-stack builds. Use the contact form below.",
   },
 ];
 
@@ -87,7 +129,7 @@ const About = () => {
                 Currently
               </div>
               <ul className="space-y-3 font-mono">
-                {CURRENTLY.map((item, i) => (
+                {CURRENTLY.map((item) => (
                   <li
                     key={item.label}
                     className="flex items-center gap-3 text-foreground/85"
@@ -132,7 +174,7 @@ const About = () => {
             </div>
           </BentoCard>
 
-          {/* Process — 2 cols / full */}
+          {/* Process — 2 cols, full row */}
           <BentoCard
             className="md:col-span-2"
             ariaLabel="My indie shipping process"
@@ -144,9 +186,7 @@ const About = () => {
               <div className="grid sm:grid-cols-3 gap-4">
                 {STEPS.map((s) => (
                   <div key={s.id} className="space-y-2">
-                    <p className="font-mono text-2xl text-gradient">
-                      {s.id}
-                    </p>
+                    <p className="font-mono text-2xl text-gradient">{s.id}</p>
                     <p className="font-display font-semibold text-lg">
                       {s.title}
                     </p>
@@ -156,6 +196,26 @@ const About = () => {
                   </div>
                 ))}
               </div>
+            </div>
+          </BentoCard>
+
+          {/* XChatWindow preview — replaces the former step card so the
+              right column still balances 3 cards tall. */}
+          <BentoCard
+            className="md:row-span-2 relative overflow-hidden"
+            glow
+            ariaLabel="Live conversation preview"
+          >
+            <div className="flex h-full flex-col gap-4">
+              <div className="flex items-center justify-between gap-2 text-xs font-mono uppercase tracking-widest text-primary/80">
+                <span>Live convo</span>
+                <GlowBadge variant="live">Interactive</GlowBadge>
+              </div>
+              <ChatBubbles messages={CHAT_PREVIEW} stagger={0.35} />
+              <p className="text-[11px] text-muted-foreground/80 leading-relaxed mt-auto">
+                <span className="font-mono text-primary">↳</span> Bubbles
+                cascade in once the card scrolls into view.
+              </p>
             </div>
           </BentoCard>
 

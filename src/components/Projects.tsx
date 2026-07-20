@@ -3,9 +3,16 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink, Github, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SectionHeader from "@/components/primitives/SectionHeader";
+import GlowCard from "@/components/primitives/GlowCard";
 import GlowBadge, { type GlowBadgeVariant } from "@/components/primitives/GlowBadge";
 
-type Category = "All" | "AI" | "Civic Tech" | "DevTools" | "Design" | "Productivity";
+type Category =
+  | "All"
+  | "AI"
+  | "Civic Tech"
+  | "DevTools"
+  | "Design"
+  | "Productivity";
 
 interface Project {
   title: string;
@@ -14,15 +21,11 @@ interface Project {
   tags: string[];
   preview?: string;
   links: { live?: string; github?: string };
+  /** Tailwind gradient used as accent image on the preview tile */
   accent: string;
   category: Exclude<Category, "All">;
-  featured?: boolean;
-  /** Badge to show + its variant */
-  status?: { label: string; variant: GlowBadgeVariant };
-  /** Social proof data */
-  stars?: number;
-  /** Live region indicator */
-  live?: boolean;
+  /** Bento sizing: hero = 2×2, wide = 2×1, omitted = 1×1 tile */
+  bentoSize?: "hero" | "wide";
 }
 
 const PROJECTS: Project[] = [
@@ -39,9 +42,7 @@ const PROJECTS: Project[] = [
     },
     accent: "from-blue-500 to-indigo-600",
     category: "Civic Tech",
-    featured: true,
-    status: { label: "Featured", variant: "new" },
-    stars: 24,
+    bentoSize: "wide",
   },
   {
     title: "CygnisAI",
@@ -56,10 +57,7 @@ const PROJECTS: Project[] = [
     },
     accent: "from-violet-500 to-purple-700",
     category: "AI",
-    featured: true,
-    status: { label: "In production", variant: "live" },
-    stars: 51,
-    live: true,
+    bentoSize: "hero",
   },
   {
     title: "Procivi",
@@ -74,8 +72,6 @@ const PROJECTS: Project[] = [
     },
     accent: "from-emerald-500 to-teal-600",
     category: "Productivity",
-    status: { label: "OSS", variant: "oss" },
-    stars: 8,
   },
   {
     title: "OmniMCP Router",
@@ -87,8 +83,6 @@ const PROJECTS: Project[] = [
     links: { github: "https://github.com/Simonc44/OmniMCP" },
     accent: "from-orange-500 to-amber-600",
     category: "DevTools",
-    status: { label: "Open-source", variant: "oss" },
-    stars: 12,
   },
   {
     title: "Homa RH",
@@ -99,6 +93,44 @@ const PROJECTS: Project[] = [
     links: { live: "https://homa-rh.vercel.app" },
     accent: "from-emerald-700 to-amber-500",
     category: "Design",
+  },
+];
+
+interface FlatProject extends Project {
+  /**
+   * Status label + badge variant — derived from `bentoSize` so the
+   * featured ones read as "Featured" / "In production" and the rest
+   * use a stable label per project.
+   */
+  status?: { label: string; variant: GlowBadgeVariant };
+  stars?: number;
+  live?: boolean;
+}
+
+const PROJECTS_FLAT: FlatProject[] = [
+  {
+    ...PROJECTS[0],
+    status: { label: "Featured", variant: "new" },
+    stars: 24,
+  },
+  {
+    ...PROJECTS[1],
+    status: { label: "In production", variant: "live" },
+    stars: 51,
+    live: true,
+  },
+  {
+    ...PROJECTS[2],
+    status: { label: "OSS", variant: "oss" },
+    stars: 8,
+  },
+  {
+    ...PROJECTS[3],
+    status: { label: "Open-source", variant: "oss" },
+    stars: 12,
+  },
+  {
+    ...PROJECTS[4],
     status: { label: "Client work", variant: "star" },
   },
 ];
@@ -114,24 +146,42 @@ const CATEGORIES: Category[] = [
 
 const slug = (s: string) => s.toLowerCase().replace(/\s+/g, "-");
 
+/** Bento sizing map — maps a project's `bentoSize` (or default) to the
+ *  Tailwind classes that compose the grid span on lg+. Mobile stays
+ *  uniform at 1 col · 1 row. */
+const BENTO_SIZES: Record<
+  NonNullable<Project["bentoSize"]> | "tile",
+  string
+> = {
+  // Hero spans a 2×2 block on lg, sits as 2×1 on md.
+  hero: "md:col-span-2 lg:col-span-2 lg:row-span-2 lg:min-h-[28rem]",
+  // Wide — 2×1 on md and lg.
+  wide: "md:col-span-2 lg:col-span-2",
+  // Default tile — 1×1 on all breakpoints.
+  tile: "",
+};
+
 const Projects = () => {
   const [active, setActive] = useState<Category>("All");
 
   const filtered = useMemo(
-    () => (active === "All" ? PROJECTS : PROJECTS.filter((p) => p.category === active)),
+    () =>
+      active === "All"
+        ? PROJECTS_FLAT
+        : PROJECTS_FLAT.filter((p) => p.category === active),
     [active]
   );
 
   const counts = useMemo(() => {
     const map: Record<Category, number> = {
-      All: PROJECTS.length,
+      All: PROJECTS_FLAT.length,
       AI: 0,
       "Civic Tech": 0,
       DevTools: 0,
       Design: 0,
       Productivity: 0,
     };
-    PROJECTS.forEach((p) => {
+    PROJECTS_FLAT.forEach((p) => {
       map[p.category] = (map[p.category] ?? 0) + 1;
     });
     return map;
@@ -176,7 +226,9 @@ const Projects = () => {
                 )}
                 <span
                   className={`relative z-10 font-mono uppercase tracking-wider ${
-                    isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                    isActive
+                      ? "text-foreground"
+                      : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
                   {cat}
@@ -189,130 +241,171 @@ const Projects = () => {
           })}
         </div>
 
-        {/* Projects grid */}
+        {/* Bento grid ==========================================================================
+            1 col on mobile (stacks uniformly — bento has no visual value below md).
+            2 cols on md (medium screens).
+            4 cols on lg+ so 2-span = half the row, 1-span = quarter.
+            `grid-flow-row-dense` backfills any odd empty cells with smaller tiles. */}
         <motion.div
           id="projects-grid"
           role="tabpanel"
           aria-labelledby={`projects-tab-${slug(active)}`}
           layout
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 grid-flow-row-dense gap-5 lg:gap-6"
         >
           <AnimatePresence mode="popLayout">
-            {filtered.map((project) => (
-              <motion.article
-                key={project.title}
-                layout
-                initial={{ opacity: 0, y: 20, scale: 0.96 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -10, scale: 0.96 }}
-                transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
-                whileHover={{ y: -4 }}
-                className="group relative overflow-hidden rounded-2xl bg-card/[0.04] backdrop-blur-md border border-white/[0.06] hover:border-primary/30 hover:shadow-[0_0_40px_-10px_hsl(var(--primary)/0.5)] transition-all duration-500 flex flex-col"
-              >
-                {/* Preview image */}
-                <div className="relative h-44 overflow-hidden bg-card/40">
-                  {project.preview ? (
-                    <img
-                      src={project.preview}
-                      alt={`${project.title} preview`}
-                      loading="lazy"
-                      className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).style.display = "none";
-                      }}
-                    />
-                  ) : (
+            {filtered.map((project) => {
+              const size = project.bentoSize ?? "tile";
+              const spanClass = BENTO_SIZES[size];
+              const isHero = size === "hero";
+              return (
+                <motion.article
+                  key={project.title}
+                  layout
+                  initial={{ opacity: 0, y: 20, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -10, scale: 0.96 }}
+                  transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
+                  whileHover={{ y: -4 }}
+                  className={`group relative rounded-2xl bg-card/[0.04] backdrop-blur-md border border-white/[0.06] hover:border-primary/30 transition-all duration-500 flex flex-col overflow-hidden ${spanClass}`}
+                >
+                  {/* The GlowCard primitive supplies the cursor-tracking
+                      border glow. Its inner `<div>` carries the project's
+                      actual visual content. */}
+                  <GlowCard className="relative flex h-full w-full flex-col">
+                    {/* Preview block — taller on hero/bento-large sizes */}
                     <div
-                      className={`w-full h-full bg-gradient-to-br ${project.accent} opacity-30`}
-                    />
-                  )}
-                  <div
-                    className={`absolute inset-0 bg-gradient-to-br ${project.accent} opacity-20 group-hover:opacity-30 transition-opacity duration-500 pointer-events-none`}
-                  />
-                  {/* Status badge */}
-                  <div className="absolute top-3 left-3 flex gap-1.5">
-                    {project.status && (
-                      <GlowBadge variant={project.status.variant}>
-                        {project.status.label}
-                      </GlowBadge>
-                    )}
-                  </div>
-                  {/* Star count */}
-                  {project.stars !== undefined && (
-                    <div className="absolute top-3 right-3 text-xs font-mono rounded-full px-2 py-0.5 bg-background/70 backdrop-blur-sm border border-white/[0.06]">
-                      <span className="text-amber-300">★</span>{" "}
-                      <span className="text-foreground">{project.stars}</span>
+                      className={`relative w-full overflow-hidden bg-card/40 ${
+                        isHero ? "h-64 lg:h-80" : "h-40 lg:h-44"
+                      }`}
+                    >
+                      {project.preview ? (
+                        <img
+                          src={project.preview}
+                          alt={`${project.title} preview`}
+                          loading="lazy"
+                          className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).style.display =
+                              "none";
+                          }}
+                        />
+                      ) : (
+                        <div
+                          className={`w-full h-full bg-gradient-to-br ${project.accent} opacity-30`}
+                        />
+                      )}
+                      <div
+                        className={`absolute inset-0 bg-gradient-to-br ${project.accent} opacity-20 group-hover:opacity-30 transition-opacity duration-500 pointer-events-none`}
+                      />
+                      {/* Status badge */}
+                      <div className="absolute top-3 left-3 flex gap-1.5">
+                        {project.status && (
+                          <GlowBadge variant={project.status.variant}>
+                            {project.status.label}
+                          </GlowBadge>
+                        )}
+                      </div>
+                      {/* Star count */}
+                      {project.stars !== undefined && (
+                        <div className="absolute top-3 right-3 text-xs font-mono rounded-full px-2 py-0.5 bg-background/70 backdrop-blur-sm border border-white/[0.06]">
+                          <span className="text-amber-300">★</span>{" "}
+                          <span className="text-foreground">
+                            {project.stars}
+                          </span>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
 
-                <div className="p-6 flex flex-col flex-1 space-y-4">
-                  <div>
-                    <p className="text-xs text-muted-foreground mb-1 font-mono uppercase tracking-wider">
-                      {project.subtitle}
-                    </p>
-                    <h3 className="text-xl font-bold group-hover:text-gradient transition-all">
-                      {project.title}
-                    </h3>
-                  </div>
-
-                  <p className="text-sm text-muted-foreground leading-relaxed flex-1">
-                    {project.description}
-                  </p>
-
-                  <div className="flex flex-wrap gap-1.5">
-                    {project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-2.5 py-0.5 text-xs font-medium rounded-full bg-primary/10 text-primary border border-primary/15 font-mono"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="flex gap-2 pt-2">
-                    {project.links.live && (
-                      <Button
-                        size="sm"
-                        className="bg-gradient-primary hover:shadow-glow transition-all duration-300 flex-1"
-                        asChild
-                      >
-                        <a
-                          href={project.links.live}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-1.5 justify-center"
-                          aria-label={`Open ${project.title} live demo`}
+                    <div
+                      className={`flex flex-col flex-1 space-y-4 ${
+                        isHero ? "p-7 lg:p-8" : "p-5 lg:p-6"
+                      }`}
+                    >
+                      <div>
+                        <p
+                          className={`text-xs text-muted-foreground mb-1 font-mono uppercase tracking-wider ${
+                            isHero ? "text-sm" : ""
+                          }`}
                         >
-                          <ExternalLink className="w-3.5 h-3.5" />
-                          Live
-                        </a>
-                      </Button>
-                    )}
-                    {project.links.github && (
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="border-primary/40 hover:bg-primary/10 flex-1"
-                        asChild
-                      >
-                        <a
-                          href={project.links.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-1.5 justify-center"
-                          aria-label={`Open ${project.title} source code`}
+                          {project.subtitle}
+                        </p>
+                        <h3
+                          className={`font-bold group-hover:text-gradient transition-all ${
+                            isHero
+                              ? "text-3xl lg:text-4xl"
+                              : "text-xl"
+                          }`}
                         >
-                          <Github className="w-3.5 h-3.5" />
-                          Code
-                        </a>
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              </motion.article>
-            ))}
+                          {project.title}
+                        </h3>
+                      </div>
+
+                      <p
+                        className={`text-muted-foreground leading-relaxed flex-1 ${
+                          isHero
+                            ? "text-base lg:text-lg max-w-2xl"
+                            : "text-sm"
+                        }`}
+                      >
+                        {project.description}
+                      </p>
+
+                      <div className="flex flex-wrap gap-1.5">
+                        {project.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="px-2.5 py-0.5 text-xs font-medium rounded-full bg-primary/10 text-primary border border-primary/15 font-mono"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+
+                      <div className="flex gap-2 pt-2">
+                        {project.links.live && (
+                          <Button
+                            size="sm"
+                            className="bg-gradient-primary hover:shadow-glow transition-all duration-300 flex-1"
+                            asChild
+                          >
+                            <a
+                              href={project.links.live}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-1.5 justify-center"
+                              aria-label={`Open ${project.title} live demo`}
+                            >
+                              <ExternalLink className="w-3.5 h-3.5" />
+                              Live
+                            </a>
+                          </Button>
+                        )}
+                        {project.links.github && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="border-primary/40 hover:bg-primary/10 flex-1"
+                            asChild
+                          >
+                            <a
+                              href={project.links.github}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-1.5 justify-center"
+                              aria-label={`Open ${project.title} source code`}
+                            >
+                              <Github className="w-3.5 h-3.5" />
+                              Code
+                            </a>
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </GlowCard>
+                </motion.article>
+              );
+            })}
           </AnimatePresence>
         </motion.div>
 

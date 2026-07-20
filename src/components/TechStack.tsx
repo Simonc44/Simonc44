@@ -13,7 +13,7 @@ import {
   VercelIcon,
 } from "@/components/tech-stack-icons";
 import SectionHeader from "@/components/primitives/SectionHeader";
-import InfiniteMarquee from "@/components/primitives/InfiniteMarquee";
+import WavyMarquee from "@/components/primitives/WavyMarquee";
 import { FadeIn } from "@/components/animations/FadeIn";
 
 interface Tech {
@@ -52,20 +52,32 @@ const TechChip = ({ tech }: { tech: Tech }) => {
   );
 };
 
-const MarqueeRow = ({
+const WavyChipRow = ({
   items,
-  reverse = false,
-  speed = 35,
+  speed,
+  amplitude,
+  freq,
+  phase,
+  gap,
 }: {
   items: Tech[];
-  reverse?: boolean;
-  speed?: number;
+  speed: number;
+  amplitude: number;
+  freq: number;
+  phase: number;
+  gap: number;
 }) => (
-  <InfiniteMarquee speed={speed} reverse={reverse} gap={20} className="py-2">
+  <WavyMarquee
+    speed={speed}
+    amplitude={amplitude}
+    freq={freq}
+    phase={phase}
+    gap={gap}
+  >
     {items.map((tech) => (
-      <TechChip key={`${tech.name}-${reverse ? "r" : "f"}`} tech={tech} />
+      <TechChip key={`${tech.name}-${phase}`} tech={tech} />
     ))}
-  </InfiniteMarquee>
+  </WavyMarquee>
 );
 
 const TechStack = () => {
@@ -84,13 +96,27 @@ const TechStack = () => {
         />
       </div>
 
-      {/* Two marquee rows */}
       <div className="relative space-y-3">
-        <MarqueeRow items={FRONTEND} speed={32} />
-        <MarqueeRow items={BACKEND_AI} reverse speed={42} />
+        {/* Top row: 2 sine cycles, baseline Y=0 */}
+        <WavyChipRow
+          items={FRONTEND}
+          speed={32}
+          amplitude={20}
+          freq={Math.PI * 2 * 2}
+          phase={0}
+          gap={20}
+        />
+        {/* Bottom row: counter-phase (pi) so the two rows visually oppose */}
+        <WavyChipRow
+          items={BACKEND_AI}
+          speed={42}
+          amplitude={20}
+          freq={Math.PI * 2 * 1.6}
+          phase={Math.PI}
+          gap={20}
+        />
       </div>
 
-      {/* Subtle footer mark */}
       <FadeIn delay={0.2}>
         <div className="container max-w-6xl mx-auto pt-4">
           <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground text-center">

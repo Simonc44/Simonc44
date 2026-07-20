@@ -69,7 +69,6 @@
   }
   html {
     scroll-behavior: smooth;
-    /* Hard-lock dark for cinematic feel even if next-themes misfires */
     color-scheme: dark;
   }
   body {
@@ -106,7 +105,6 @@
     box-shadow: var(--shadow-glow);
   }
 
-  /* Display font — Inter Variable weight 600-700 for headlines */
   .font-display {
     font-family: var(--font-display);
     font-feature-settings: "cv11", "ss01";
@@ -117,91 +115,69 @@
     font-feature-settings: "calt", "liga";
   }
 
-  /* Edge-fade mask for marquees */
   .mask-fade-x {
     -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
     mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
   }
 
-  /* Cinematic vignette — used inline on sections that need focus */
   .vignette-x {
     -webkit-mask-image: radial-gradient(ellipse 90% 60% at 50% 40%, black 40%, transparent 100%);
     mask-image: radial-gradient(ellipse 90% 60% at 50% 40%, black 40%, transparent 100%);
   }
 
-  /* ── Hero CSS-only cycling typing animation (kept) ── */
-  .hero-role-wrapper {
-    height: 2.4rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  @media (min-width: 768px) {
-    .hero-role-wrapper {
-      justify-content: flex-start;
+  /* ── Tilt-aware glass overlays (kept from previous round) ── */
+  @media (hover: none) and (pointer: coarse) {
+    .tilt-3d {
+      transform: none !important;
     }
   }
-
-  .hero-role {
-    font-size: 1.25rem;
-    font-family: var(--font-mono);
-    color: currentColor;
-    white-space: nowrap;
-    overflow: hidden;
-    border-right: 2px solid hsl(var(--primary));
-    width: 0;
-    animation:
-      roleType 7s steps(30, end) infinite,
-      roleBlink 0.75s step-end infinite,
-      roleSwitch 28s step-start infinite;
-  }
-
   @media (prefers-reduced-motion: reduce) {
-    .hero-role {
-      width: auto;
-      border-right: none;
-      animation: none;
+    .tilt-3d {
+      transform: none !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
     }
   }
 
-  .hero-role::before {
-    content: "Full-Stack Developer";
-    animation: roleContent 28s step-start infinite;
+  /* ── Global chat-bubble hover affordance when text is selectable ── */
+  .chat-bubble {
+    user-select: text;
   }
 
-  @keyframes roleContent {
-    0%   { content: "Full-Stack Developer"; }
-    25%  { content: "Indie Maker"; }
-    50%  { content: "AI Builder"; }
-    75%  { content: "Open Source Contributor"; }
-    100% { content: "Full-Stack Developer"; }
+  /* ── Glow border tracker ──
+     The mask-composite trick confines a child element's painted region
+     to just the outer ring (between content-box and border-box). The
+     element's `background` is a radial gradient (cursor-tracking) so
+     only the border area illuminates, never the card interior.
+
+     Padding: N sets the ring width to N px on every side. The two-layer
+     mask technique:
+       1. linear-gradient(#fff 0 0) content-box → paints only the inner
+          content-box area (everything except the padding ring).
+       2. linear-gradient(#fff 0 0) → paints the entire element box.
+       3. mask-composite: exclude → keeps #2 minus #1 = the ring only.
+
+     Browsers without mask-composite fall back to a soft-glow look since
+     the inner content is still above the glow layer (z-10 on the host).
+  */
+  .glow-border-tracker {
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask-composite: exclude;
   }
 
-  @keyframes roleType {
-    0%   { width: 0; }
-    40%  { width: 22ch; }
-    60%  { width: 22ch; }
-    90%  { width: 0; }
-    100% { width: 0; }
-  }
-
-  @keyframes roleBlink {
-    0%, 100% { border-color: hsl(var(--primary)); }
-    50%       { border-color: transparent; }
-  }
-
-  .hero-cursor {
-    display: inline-block;
-    width: 8px;
-    height: 1em;
-    background: hsl(var(--primary));
-    vertical-align: middle;
-    animation: cursorBlink 1s step-end infinite;
-    margin-left: 2px;
-  }
-  @keyframes cursorBlink {
-    0%, 100% { opacity: 1; }
-    50%       { opacity: 0; }
+  /* When mask-composite isn't supported, fade the glow slightly so the
+     interior isn't blown out. */
+  @supports not (mask-composite: exclude) {
+    .glow-border-tracker {
+      padding: 0 !important;
+      opacity: 0.65;
+    }
   }
 
   /* ── Subtle filmic noise on body ── */
