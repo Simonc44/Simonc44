@@ -1,5 +1,4 @@
-import { motion } from "framer-motion";
-import { FadeIn } from "@/components/animations/FadeIn";
+import { motion, useReducedMotion } from "framer-motion";
 import {
   ReactIcon,
   TypeScriptIcon,
@@ -14,74 +13,117 @@ import {
   TanStackIcon,
   VercelIcon,
 } from "@/components/tech-stack-icons";
+import SectionHeader from "@/components/primitives/SectionHeader";
+import InfiniteMarquee from "@/components/primitives/InfiniteMarquee";
 
-const TECHNOLOGIES = [
-  { name: "React", icon: ReactIcon, color: "text-sky-400", bg: "bg-sky-400/10" },
-  { name: "TypeScript", icon: TypeScriptIcon, color: "text-blue-500", bg: "bg-blue-500/10" },
-  { name: "Next.js", icon: NextJsIcon, color: "text-foreground", bg: "bg-foreground/10" },
-  { name: "Tailwind CSS", icon: TailwindIcon, color: "text-cyan-400", bg: "bg-cyan-400/10" },
-  { name: "Firebase", icon: FirebaseIcon, color: "text-amber-500", bg: "bg-amber-500/10" },
-  { name: "Node.js", icon: NodeJsIcon, color: "text-green-500", bg: "bg-green-500/10" },
-  { name: "Vite", icon: ViteIcon, color: "text-violet-400", bg: "bg-violet-400/10" },
-  { name: "TanStack", icon: TanStackIcon, color: "text-rose-400", bg: "bg-rose-400/10" },
-  { name: "Turso / SQLite", icon: DatabaseIcon, color: "text-teal-400", bg: "bg-teal-400/10" },
-  { name: "Vercel", icon: VercelIcon, color: "text-foreground", bg: "bg-foreground/10" },
-  { name: "Google Gemini", icon: GeminiIcon, color: "text-blue-400", bg: "bg-blue-400/10" },
-  { name: "Groq", icon: GroqIcon, color: "text-orange-400", bg: "bg-orange-400/10" },
+interface Tech {
+  name: string;
+  icon: React.ComponentType<{ className?: string }>;
+  color: string;
+}
+
+const FRONTEND: Tech[] = [
+  { name: "React", icon: ReactIcon, color: "text-sky-300" },
+  { name: "TypeScript", icon: TypeScriptIcon, color: "text-blue-400" },
+  { name: "Next.js", icon: NextJsIcon, color: "text-foreground" },
+  { name: "Tailwind CSS", icon: TailwindIcon, color: "text-cyan-300" },
+  { name: "Vite", icon: ViteIcon, color: "text-violet-300" },
+  { name: "TanStack", icon: TanStackIcon, color: "text-rose-300" },
 ];
+
+const BACKEND_AI: Tech[] = [
+  { name: "Node.js", icon: NodeJsIcon, color: "text-green-400" },
+  { name: "Firebase", icon: FirebaseIcon, color: "text-amber-400" },
+  { name: "Turso / SQLite", icon: DatabaseIcon, color: "text-teal-300" },
+  { name: "Vercel", icon: VercelIcon, color: "text-foreground" },
+  { name: "Google Gemini", icon: GeminiIcon, color: "text-blue-300" },
+  { name: "Groq", icon: GroqIcon, color: "text-orange-300" },
+];
+
+const TechChip = ({ tech }: { tech: Tech }) => {
+  const Icon = tech.icon;
+  return (
+    <div className="flex items-center gap-3 rounded-full border border-white/[0.06] bg-card/[0.04] backdrop-blur-md pl-3 pr-5 py-2.5 whitespace-nowrap hover:border-primary/30 transition-colors">
+      <Icon className={`w-5 h-5 ${tech.color}`} />
+      <span className="text-sm font-medium text-foreground/90">
+        {tech.name}
+      </span>
+    </div>
+  );
+};
+
+const MarqueeRow = ({
+  items,
+  reverse = false,
+  speed = 35,
+}: {
+  items: Tech[];
+  reverse?: boolean;
+  speed?: number;
+}) => (
+  <InfiniteMarquee speed={speed} reverse={reverse} gap={20} className="py-2">
+    {items.map((tech) => (
+      <TechChip key={`${tech.name}-${reverse ? "r" : "f"}`} tech={tech} />
+    ))}
+  </InfiniteMarquee>
+);
 
 const TechStack = () => {
   return (
-    <section id="tech" className="py-24 px-4 relative overflow-hidden">
-      {/* Background glow */}
-      <div className="absolute inset-0 bg-gradient-radial from-primary/5 via-transparent to-transparent pointer-events-none" />
+    <section
+      id="tech"
+      className="py-24 px-4 relative overflow-hidden space-y-12"
+    >
+      <div className="absolute inset-0 bg-gradient-radial from-primary/[0.06] via-transparent to-transparent pointer-events-none" />
 
       <div className="container max-w-6xl mx-auto relative z-10">
-        <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
-          <FadeIn>
-            <p className="text-sm font-mono tracking-widest uppercase text-primary/70">
-              Tools of the trade
-            </p>
-          </FadeIn>
-          <FadeIn delay={0.1}>
-            <h2 className="text-4xl md:text-5xl font-serif font-medium">
-              My <span className="text-gradient">Tech Stack</span>
-            </h2>
-          </FadeIn>
-          <FadeIn delay={0.2}>
-            <p className="text-lg text-muted-foreground">
-              Technologies I reach for to bring ideas to production.
-            </p>
-          </FadeIn>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-          {TECHNOLOGIES.map((tech, index) => {
-            const Icon = tech.icon;
-            return (
-              <FadeIn key={tech.name} delay={index * 0.05} direction="up">
-                <motion.div
-                  whileHover={{ y: -6, scale: 1.02 }}
-                  transition={{ duration: 0.2 }}
-                  className="group relative overflow-hidden rounded-2xl border border-border/60 bg-card/50 backdrop-blur-sm p-6 flex flex-col items-center gap-4 hover:border-primary/30 hover:bg-card/80 transition-colors duration-300 h-full"
-                >
-                  <motion.div
-                    whileHover={{ y: -4 }}
-                    transition={{ duration: 0.2 }}
-                    className={`p-4 rounded-xl ${tech.bg} ${tech.color}`}
-                  >
-                    <Icon className="w-7 h-7" />
-                  </motion.div>
-                  <span className="text-sm font-medium text-center text-muted-foreground group-hover:text-foreground transition-colors">
-                    {tech.name}
-                  </span>
-                </motion.div>
-              </FadeIn>
-            );
-          })}
-        </div>
+        <SectionHeader
+          index="02 / Stack"
+          title="The stack I ship with."
+          description="Tools I reach for to bring ideas to production. The list grows every sprint — try not to blink."
+        />
       </div>
+
+      {/* Two marquee rows */}
+      <div className="relative space-y-3">
+        <MarqueeRow items={FRONTEND} speed={32} />
+        <MarqueeRow items={BACKEND_AI} reverse speed={42} />
+      </div>
+
+      {/* Subtle footer mark */}
+      <FadeIn delay={0.2}>
+        <div className="container max-w-6xl mx-auto pt-4">
+          <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground text-center">
+            12+ technologies · always evolving
+          </p>
+        </div>
+      </FadeIn>
     </section>
+  );
+};
+
+// Local FadeIn shortcut to avoid an extra file import — Framer-powered
+const FadeIn = ({
+  children,
+  delay = 0,
+}: {
+  children: React.ReactNode;
+  delay?: number;
+}) => {
+  const shouldReduceMotion = useReducedMotion();
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{
+        duration: 0.5,
+        delay,
+        ease: [0.25, 0.1, 0.25, 1],
+      }}
+    >
+      {children}
+    </motion.div>
   );
 };
 

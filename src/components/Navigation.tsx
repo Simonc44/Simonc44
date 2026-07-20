@@ -1,23 +1,27 @@
 import { useState, useMemo } from "react";
-import { X, Menu } from "lucide-react";
-import { ThemeToggle } from "@/components/ThemeToggle";
+import { X, Menu, ArrowUpRight } from "lucide-react";
 import { useActiveSection } from "@/hooks/use-active-section";
 import { motion, AnimatePresence } from "framer-motion";
 
 const NAV_ITEMS = [
   { name: "About", href: "#about" },
-  { name: "Terminal", href: "#terminal" },
   { name: "Stack", href: "#tech" },
+  { name: "Terminal", href: "#terminal" },
   { name: "Projects", href: "#projects" },
-  { name: "Contact", href: "#contact" },
 ];
 
 const Navigation = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const sectionIds = useMemo(() => NAV_ITEMS.map((item) => item.href.replace("#", "")), []);
+  const sectionIds = useMemo(
+    () => NAV_ITEMS.map((item) => item.href.replace("#", "")),
+    []
+  );
   const activeSection = useActiveSection(sectionIds);
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string
+  ) => {
     e.preventDefault();
     setMenuOpen(false);
     const id = href.replace("#", "");
@@ -36,9 +40,10 @@ const Navigation = () => {
                 e.preventDefault();
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }}
-              className="text-xl font-serif font-medium text-foreground hover:text-primary transition-colors"
+              className="flex items-center gap-2 text-lg font-display font-semibold tracking-tight hover:opacity-80 transition-opacity"
             >
-              Simon.
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              simon<span className="text-primary">.</span>
             </a>
 
             {/* Desktop links */}
@@ -50,7 +55,7 @@ const Navigation = () => {
                     key={item.name}
                     href={item.href}
                     onClick={(e) => handleNavClick(e, item.href)}
-                    className="relative px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-200 group"
+                    className="relative px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-200"
                     aria-current={isActive ? "page" : undefined}
                   >
                     {item.name}
@@ -66,9 +71,16 @@ const Navigation = () => {
               })}
             </div>
 
-            {/* Right actions */}
+            {/* Right CTA */}
             <div className="flex items-center gap-2">
-              <ThemeToggle />
+              <a
+                href="#contact"
+                onClick={(e) => handleNavClick(e, "#contact")}
+                className="hidden md:inline-flex items-center gap-1.5 rounded-full bg-gradient-primary text-primary-foreground font-mono text-xs uppercase tracking-widest px-4 py-2 hover:shadow-glow transition-all duration-300"
+              >
+                Initialize
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </a>
 
               {/* Mobile burger */}
               <button
@@ -85,47 +97,53 @@ const Navigation = () => {
 
       {/* Mobile drawer */}
       <AnimatePresence>
-      {menuOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-40 md:hidden"
-        >
-          {/* Backdrop */}
-          <div
-            className="absolute inset-0 bg-background/60 backdrop-blur-sm"
-            onClick={() => setMenuOpen(false)}
-          />
-          {/* Panel */}
+        {menuOpen && (
           <motion.div
-            initial={{ y: -20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -20, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="absolute top-16 left-0 right-0 bg-background/95 backdrop-blur-lg border-b border-border/40 px-4 py-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-40 md:hidden"
           >
-            {NAV_ITEMS.map((item) => {
-              const isActive = activeSection === item.href.replace("#", "");
-              return (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  onClick={(e) => handleNavClick(e, item.href)}
-                  className={`block px-4 py-3 text-base font-medium rounded-xl transition-all duration-200 ${
-                    isActive
-                      ? "text-foreground bg-primary/10 border border-primary/20"
-                      : "text-muted-foreground hover:text-foreground hover:bg-primary/5"
-                  }`}
-                  aria-current={isActive ? "page" : undefined}
-                >
-                  {item.name}
-                </a>
-              );
-            })}
+            <div
+              className="absolute inset-0 bg-background/80 backdrop-blur-md"
+              onClick={() => setMenuOpen(false)}
+            />
+            <motion.div
+              initial={{ y: -20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -20, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="absolute top-16 left-0 right-0 bg-background/95 backdrop-blur-lg border-b border-border/40 px-4 py-4"
+            >
+              {NAV_ITEMS.map((item) => {
+                const isActive = activeSection === item.href.replace("#", "");
+                return (
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    onClick={(e) => handleNavClick(e, item.href)}
+                    className={`block px-4 py-3 text-base font-medium rounded-xl transition-all duration-200 ${
+                      isActive
+                        ? "text-foreground bg-primary/10 border border-primary/20"
+                        : "text-muted-foreground hover:text-foreground hover:bg-primary/5"
+                    }`}
+                    aria-current={isActive ? "page" : undefined}
+                  >
+                    {item.name}
+                  </a>
+                );
+              })}
+              <a
+                href="#contact"
+                onClick={(e) => handleNavClick(e, "#contact")}
+                className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-gradient-primary text-primary-foreground font-mono text-xs uppercase tracking-widest px-4 py-2"
+              >
+                Initialize
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </a>
+            </motion.div>
           </motion.div>
-        </motion.div>
-      )}
+        )}
       </AnimatePresence>
     </>
   );

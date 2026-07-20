@@ -1,113 +1,180 @@
+import { useEffect, useRef, useState, Suspense } from "react";
 import { motion } from "framer-motion";
-import { FadeIn } from "@/components/animations/FadeIn";
-
-const STATS = [
-  { value: "3+", label: "Years building" },
-  { value: "5+", label: "Projects shipped" },
-  { value: "2", label: "SaaS products" },
-  { value: "OSS", label: "Contributor" },
-];
+import SectionHeader from "@/components/primitives/SectionHeader";
+import BentoCard from "@/components/primitives/BentoCard";
+import GlowBadge from "@/components/primitives/GlowBadge";
+import DraggableSkills from "@/components/DraggableSkills";
+import ThreeScene from "@/components/ThreeScene";
 
 const CURRENTLY = [
-  "Building CygnisAI & Mandat (civic tech)",
-  "Exploring SaaS ideas via Reddit research",
-  "Learning advanced LLM orchestration",
-  "Open to collabs & freelance",
+  { label: "Building CygnisAI & Mandat (civic tech)", tone: "primary" as const },
+  { label: "Exploring SaaS ideas via Reddit research", tone: "primary" as const },
+  { label: "Learning advanced LLM orchestration", tone: "primary" as const },
+  { label: "Open to collabs & freelance", tone: "live" as const },
 ];
+
+const STEPS = [
+  {
+    id: "01",
+    title: "Ideate",
+    body: "Reddit research, user pain-points & rapid wireframes — no idea ships without a 'why now'.",
+  },
+  {
+    id: "02",
+    title: "Build",
+    body: "Production-grade React, TS, AI orchestration. Tight feedback loops with the design system.",
+  },
+  {
+    id: "03",
+    title: "Ship",
+    body: "Vercel previews, edge functions, analytics wired in from day one. Public by default.",
+  },
+];
+
+const TONE_CLASS: Record<string, string> = {
+  primary: "bg-primary",
+  live: "bg-emerald-400",
+};
+
+/** Mounts the (heavy) ThreeScene only while the section is in viewport. */
+const LazyThreeScene = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { rootMargin: "200px" }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  return (
+    <div ref={ref} className="absolute inset-0">
+      {inView && (
+        <Suspense fallback={null}>
+          <ThreeScene />
+        </Suspense>
+      )}
+    </div>
+  );
+};
 
 const About = () => {
   return (
-    <section id="about" className="py-24 px-4 relative">
-      <div className="container max-w-6xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Left — text */}
-          <div className="space-y-8">
-            <FadeIn>
-              <p className="text-sm font-mono tracking-widest uppercase text-primary/70">
-                Who am I
-              </p>
-            </FadeIn>
+    <section id="about" className="py-24 px-4 relative overflow-hidden">
+      <div className="container max-w-6xl mx-auto space-y-12">
+        <SectionHeader
+          index="01 / The Maker"
+          title="An indie maker obsessed with shipping."
+          description="Self-taught French developer at the intersection of AI, civic-tech and developer tooling. This is how I work, what I'm focused on and the interactive identity card I made for fun."
+          eyebrow={<GlowBadge variant="new">About me</GlowBadge>}
+        />
 
-            <FadeIn delay={0.1}>
-              <h2 className="text-4xl md:text-5xl font-serif font-medium leading-tight">
-                About <span className="text-gradient">Me</span>
-              </h2>
-            </FadeIn>
-
-            <FadeIn delay={0.2}>
-              <div className="space-y-5 text-lg text-muted-foreground leading-relaxed">
-                <p>
-                  I&apos;m a self-taught French developer obsessed with shipping things that matter. I build
-                  full-stack web products at the intersection of{" "}
-                  <span className="text-foreground font-medium">AI, civic tech, and developer tooling</span>.
-                </p>
-                <p>
-                  Currently leading the development of{" "}
-                  <a
-                    href="https://cygnis-ai.vercel.app"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-foreground font-medium hover:text-primary transition-colors"
-                  >
-                    CygnisAI
-                  </a>{" "}
-                  — a platform connecting your data with intelligent AI agents — and building
-                  open-source tools like <span className="text-foreground font-medium">Mandat</span> and
-                  OmniMCP Router.
-                </p>
-                <p>
-                  I&apos;m exploring LLM orchestration, multi-modal generation and serverless scaling.
-                  Always looking to collaborate on open-source projects that push human-computer
-                  interaction forward.
-                </p>
+        {/* Bento grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 auto-rows-[minmax(220px,auto)]">
+          {/* Currently — 2 cols */}
+          <BentoCard
+            className="md:col-span-2 row-span-1"
+            glow
+            ariaLabel="What I'm focused on right now"
+          >
+            <div className="space-y-4 h-full flex flex-col">
+              <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-primary/80">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                Currently
               </div>
-            </FadeIn>
-
-            <FadeIn delay={0.3}>
-              <blockquote className="border-l-2 border-primary pl-5 italic text-foreground/70 text-lg">
-                &ldquo;The best way to predict the future is to build it.&rdquo;
-              </blockquote>
-            </FadeIn>
-          </div>
-
-          {/* Right — stats + currently */}
-          <div className="space-y-8">
-            <FadeIn delay={0.2} direction="left">
-              <div className="grid grid-cols-2 gap-4">
-                {STATS.map(({ value, label }) => (
-                  <motion.div
-                    key={label}
-                    whileHover={{ y: -4 }}
-                    transition={{ duration: 0.2 }}
-                    className="bg-gradient-card backdrop-blur-sm border border-border/60 rounded-2xl p-6 text-center hover:border-primary/30 transition-colors duration-300"
+              <ul className="space-y-3 font-mono">
+                {CURRENTLY.map((item, i) => (
+                  <li
+                    key={item.label}
+                    className="flex items-center gap-3 text-foreground/85"
                   >
-                    <p className="text-4xl md:text-5xl font-serif font-medium text-gradient mb-2">
-                      {value}
+                    <span
+                      className={`w-2 h-2 rounded-full flex-shrink-0 ${TONE_CLASS[item.tone]}`}
+                    />
+                    <span
+                      className={
+                        item.tone === "live" ? "text-emerald-300" : ""
+                      }
+                    >
+                      {item.label}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-auto text-sm text-muted-foreground italic border-l-2 border-primary/30 pl-4">
+                &ldquo;The best way to predict the future is to build it.&rdquo;
+              </p>
+            </div>
+          </BentoCard>
+
+          {/* Interactive identity — 3D scene — 1 column but tall */}
+          <BentoCard
+            className="md:row-span-2 relative overflow-hidden min-h-[400px]"
+            glow
+            ariaLabel="Interactive 3D identity card"
+          >
+            <div className="relative h-full flex flex-col">
+              <div className="flex items-center justify-between gap-2 text-xs font-mono uppercase tracking-widest text-primary/80 z-10">
+                <span>Identity</span>
+                <GlowBadge variant="live">Interactive</GlowBadge>
+              </div>
+              <div className="flex-1 relative">
+                <LazyThreeScene />
+              </div>
+              <p className="text-xs text-muted-foreground z-10">
+                <span className="font-mono text-primary">↳</span> Move your
+                cursor around — parallax + glow.
+              </p>
+            </div>
+          </BentoCard>
+
+          {/* Process — 2 cols / full */}
+          <BentoCard
+            className="md:col-span-2"
+            ariaLabel="My indie shipping process"
+          >
+            <div className="space-y-4">
+              <div className="text-xs font-mono uppercase tracking-widest text-primary/80">
+                Process
+              </div>
+              <div className="grid sm:grid-cols-3 gap-4">
+                {STEPS.map((s) => (
+                  <div key={s.id} className="space-y-2">
+                    <p className="font-mono text-2xl text-gradient">
+                      {s.id}
                     </p>
-                    <p className="text-sm text-muted-foreground">{label}</p>
-                  </motion.div>
+                    <p className="font-display font-semibold text-lg">
+                      {s.title}
+                    </p>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      {s.body}
+                    </p>
+                  </div>
                 ))}
               </div>
-            </FadeIn>
+            </div>
+          </BentoCard>
 
-            <FadeIn delay={0.3} direction="left">
-              <div className="bg-gradient-card backdrop-blur-sm border border-border/60 rounded-2xl p-6 space-y-4">
-                <p className="text-xs font-mono text-primary/70 tracking-widest uppercase">Currently</p>
-                <ul className="space-y-3">
-                  {CURRENTLY.map((item, index) => (
-                    <li key={item} className="flex items-center gap-3 text-muted-foreground">
-                      <span
-                        className={`w-2 h-2 rounded-full flex-shrink-0 ${
-                          index === CURRENTLY.length - 1 ? "bg-emerald-400" : "bg-primary"
-                        }`}
-                      />
-                      <span className={index === CURRENTLY.length - 1 ? "text-emerald-400" : ""}>{item}</span>
-                    </li>
-                  ))}
-                </ul>
+          {/* Draggable Skills — full width */}
+          <BentoCard
+            className="md:col-span-3"
+            ariaLabel="Drag to reorder my skill clusters"
+          >
+            <div className="space-y-3">
+              <div className="flex items-center justify-between gap-2 text-xs font-mono uppercase tracking-widest text-primary/80">
+                <span>Skills — drag to reorder</span>
+                <GlowBadge variant="new">Interactive</GlowBadge>
               </div>
-            </FadeIn>
-          </div>
+              <div className="flex justify-center pt-2">
+                <DraggableSkills />
+              </div>
+            </div>
+          </BentoCard>
         </div>
       </div>
     </section>
