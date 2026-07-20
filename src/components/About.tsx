@@ -5,7 +5,7 @@ const STATS = [
   { value: "3+", label: "Years building" },
   { value: "5+", label: "Projects shipped" },
   { value: "2", label: "SaaS products" },
-  { value: "∞", label: "Coffees brewed" },
+  { value: "OSS", label: "Contributor" },
 ];
 
 const CURRENTLY = [

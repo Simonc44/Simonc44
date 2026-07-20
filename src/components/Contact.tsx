@@ -1,18 +1,18 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Mail, Linkedin, Instagram, Github, MapPin, Copy, Check, Send, Loader2 } from "lucide-react";
+import {
+  Mail,
+  Linkedin,
+  Instagram,
+  Github,
+  MapPin,
+  Copy,
+  Check,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { FadeIn } from "@/components/animations/FadeIn";
 
-// Stay safely under the ~2000-char mailto URI limit after encodeURIComponent (~×1.5).
-const MAX_BODY_CHARS = 1200;
-
-const CONTACT_EMAIL = "simon.chusseau@gmail.com"; // Replace with your real address
+const CONTACT_EMAIL = "simon.chusseau@gmail.com";
 
 const socials = [
   {
@@ -41,31 +41,9 @@ const socials = [
   },
 ];
 
-const contactSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters").max(80),
-  email: z.string().email("Please enter a valid email"),
-  subject: z.string().min(3, "Subject must be at least 3 characters").max(120),
-  // Keep the raw message length aligned with the `MAX_BODY_CHARS` budget so we
-  // don't validate a 1500-char message that gets silently truncated to ~1100.
-  message: z.string().min(10, "Message must be at least 10 characters").max(1100),
-});
-
-type ContactFormValues = z.infer<typeof contactSchema>;
-
 const Contact = () => {
   const { toast } = useToast();
   const [copied, setCopied] = useState(false);
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors, isSubmitting },
-  } = useForm<ContactFormValues>({
-    resolver: zodResolver(contactSchema),
-    mode: "onTouched",
-    defaultValues: { name: "", email: "", subject: "", message: "" },
-  });
 
   const onCopyEmail = async () => {
     try {
@@ -84,31 +62,6 @@ const Contact = () => {
       });
     }
   };
-
-  const onSubmit = handleSubmit((values) => {
-    // Compose a mailto link with the form payload. Keep raw body short so the
-    // encoded URI stays under the ~2000-char limit on Gmail / Outlook.
-    const subject = encodeURIComponent(`[Portfolio] ${values.subject}`);
-    const suffix = `\n\n— ${values.name}\n${values.email}`;
-    const budget = MAX_BODY_CHARS - suffix.length - `Hi Simon,\n\n`.length;
-    const mainMessage =
-      values.message.length > Math.max(0, budget)
-        ? `${values.message.slice(0, Math.max(0, budget - 1))}…`
-        : values.message;
-    const bodyText = `Hi Simon,\n\n${mainMessage}${suffix}`;
-    const body = encodeURIComponent(bodyText);
-    const href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
-
-    // Best-effort: open the user's mail client.
-    window.location.href = href;
-
-    toast({
-      title: "Opening your mail client…",
-      description: "If nothing happened, copy the email and write me directly.",
-    });
-
-    reset();
-  });
 
   return (
     <section id="contact" className="py-24 px-4 relative overflow-hidden">
@@ -159,159 +112,59 @@ const Contact = () => {
           </div>
         </FadeIn>
 
-        <div className="grid lg:grid-cols-5 gap-6">
-          {/* Email card */}
-          <FadeIn delay={0.35} className="lg:col-span-2">
-            <div className="h-full bg-gradient-card backdrop-blur-sm rounded-2xl p-8 border border-primary/10 text-center space-y-5 flex flex-col justify-center">
-              <div className="flex items-center justify-center gap-2 text-muted-foreground text-sm">
-                <MapPin className="w-4 h-4" />
-                <span>France — working remotely worldwide</span>
-              </div>
-              <div className="flex items-center justify-center">
-                <div className="p-4 rounded-2xl bg-primary/10 border border-primary/20">
-                  <Mail className="w-8 h-8 text-primary" />
-                </div>
-              </div>
-              <h3 className="text-2xl font-bold">Prefer email?</h3>
-              <p className="text-muted-foreground text-sm">
-                Click to copy or open your mail client.
-              </p>
-              <div className="flex flex-col gap-2">
-                <code className="font-mono text-sm bg-background/60 border border-border/60 rounded-lg px-3 py-2 select-all">
-                  {CONTACT_EMAIL}
-                </code>
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex-1 border-primary/40 hover:bg-primary/10"
-                    onClick={onCopyEmail}
-                  >
-                    {copied ? (
-                      <>
-                        <Check className="w-4 h-4" />
-                        Copied
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="w-4 h-4" />
-                        Copy
-                      </>
-                    )}
-                  </Button>
-                  <Button
-                    size="sm"
-                    className="flex-1 bg-gradient-primary hover:shadow-glow transition-all duration-300"
-                    asChild
-                  >
-                    <a href={`mailto:${CONTACT_EMAIL}`}>
-                      <Mail className="w-4 h-4" />
-                      Open
-                    </a>
-                  </Button>
-                </div>
+        {/* Email card (form removed — click to copy / open) */}
+        <FadeIn delay={0.35}>
+          <div className="max-w-xl mx-auto bg-gradient-card backdrop-blur-sm rounded-2xl p-8 md:p-10 border border-primary/10 shadow-glow text-center space-y-5">
+            <div className="flex items-center justify-center gap-2 text-muted-foreground text-sm">
+              <MapPin className="w-4 h-4" />
+              <span>France</span>
+            </div>
+            <div className="flex items-center justify-center">
+              <div className="p-3 md:p-4 rounded-2xl bg-primary/10 border border-primary/20">
+                <Mail className="w-7 h-7 md:w-8 md:h-8 text-primary" />
               </div>
             </div>
-          </FadeIn>
-
-          {/* Contact form */}
-          <FadeIn delay={0.4} className="lg:col-span-3">
-            <form
-              onSubmit={onSubmit}
-              noValidate
-              className="bg-gradient-card backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-primary/10 space-y-4"
-            >
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <label htmlFor="name" className="text-sm font-medium">
-                    Name
-                  </label>
-                  <Input
-                    id="name"
-                    placeholder="Your name"
-                    autoComplete="name"
-                    aria-invalid={!!errors.name}
-                    {...register("name")}
-                  />
-                  {errors.name && (
-                    <p className="text-xs text-red-400">{errors.name.message}</p>
-                  )}
-                </div>
-                <div className="space-y-1.5">
-                  <label htmlFor="email" className="text-sm font-medium">
-                    Email
-                  </label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="you@example.com"
-                    autoComplete="email"
-                    aria-invalid={!!errors.email}
-                    {...register("email")}
-                  />
-                  {errors.email && (
-                    <p className="text-xs text-red-400">{errors.email.message}</p>
-                  )}
-                </div>
-              </div>
-
-              <div className="space-y-1.5">
-                <label htmlFor="subject" className="text-sm font-medium">
-                  Subject
-                </label>
-                <Input
-                  id="subject"
-                  placeholder="What's this about?"
-                  aria-invalid={!!errors.subject}
-                  {...register("subject")}
-                />
-                {errors.subject && (
-                  <p className="text-xs text-red-400">{errors.subject.message}</p>
-                )}
-              </div>
-
-              <div className="space-y-1.5">
-                <label htmlFor="message" className="text-sm font-medium">
-                  Message
-                </label>
-                <Textarea
-                  id="message"
-                  rows={5}
-                  placeholder="Tell me about your project, idea, or question…"
-                  aria-invalid={!!errors.message}
-                  {...register("message")}
-                />
-                {errors.message && (
-                  <p className="text-xs text-red-400">{errors.message.message}</p>
-                )}
-              </div>
-
-              <div className="flex items-center justify-between gap-3 pt-1">
-                <p className="text-xs text-muted-foreground">
-                  Submitting opens your mail client with the message pre-filled.
-                </p>
+            <h3 className="text-2xl md:text-3xl font-bold">Prefer email?</h3>
+            <p className="text-muted-foreground text-sm md:text-base">
+              Click to copy or open your mail client.
+            </p>
+            <div className="flex flex-col gap-2 max-w-md mx-auto">
+              <code className="font-mono text-sm bg-background/60 border border-border/60 rounded-lg px-3 py-2 select-all break-all">
+                {CONTACT_EMAIL}
+              </code>
+              <div className="flex gap-2">
                 <Button
-                  type="submit"
-                  size="lg"
-                  disabled={isSubmitting}
-                  className="bg-gradient-primary hover:shadow-glow transition-all duration-300"
+                  variant="outline"
+                  size="sm"
+                  className="flex-1 border-primary/40 hover:bg-primary/10"
+                  onClick={onCopyEmail}
                 >
-                  {isSubmitting ? (
+                  {copied ? (
                     <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      Sending…
+                      <Check className="w-4 h-4" />
+                      Copied
                     </>
                   ) : (
                     <>
-                      <Send className="w-4 h-4" />
-                      Send Message
+                      <Copy className="w-4 h-4" />
+                      Copy
                     </>
                   )}
                 </Button>
+                <Button
+                  size="sm"
+                  className="flex-1 bg-gradient-primary hover:shadow-glow transition-all duration-300"
+                  asChild
+                >
+                  <a href={`mailto:${CONTACT_EMAIL}`}>
+                    <Mail className="w-4 h-4" />
+                    Open
+                  </a>
+                </Button>
               </div>
-            </form>
-          </FadeIn>
-        </div>
+            </div>
+          </div>
+        </FadeIn>
       </div>
     </section>
   );

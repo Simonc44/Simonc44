@@ -1,7 +1,9 @@
+import { Suspense } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Github, Linkedin, Instagram, ArrowDown } from "lucide-react";
 import { FadeIn } from "@/components/animations/FadeIn";
+import ThreeScene from "@/components/ThreeScene";
 
 const Hero = () => {
   const shouldReduceMotion = useReducedMotion();
@@ -28,6 +30,13 @@ const Hero = () => {
             "radial-gradient(ellipse at 75% 75%, hsl(340 75% 60% / 0.06) 0%, transparent 55%)",
         }}
       />
+
+      {/* Floating 3D objects — pointer-events-none so they never block interactions */}
+      <div className="absolute inset-0 pointer-events-none z-[1]" aria-hidden="true">
+        <Suspense fallback={null}>
+          <ThreeScene />
+        </Suspense>
+      </div>
 
       <div className="container relative z-10 px-4 py-24 w-full">
         <div className="max-w-6xl mx-auto">
@@ -133,7 +142,7 @@ const Hero = () => {
                   <p className="text-primary">$ cat about.txt</p>
                   <p className="text-foreground/70 leading-relaxed">
                     🚀 Indie Maker &amp; AI Builder<br />
-                    📍 France — remote worldwide<br />
+                    📍 France<br />
                     🛠 React · TypeScript · LLMs<br />
                     🌱 Building: CygnisAI · Mandat<br />
                     ✅ Open to collabs
