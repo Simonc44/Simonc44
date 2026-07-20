@@ -1,4 +1,3 @@
-import { motion, useReducedMotion } from "framer-motion";
 import {
   ReactIcon,
   TypeScriptIcon,
@@ -15,6 +14,7 @@ import {
 } from "@/components/tech-stack-icons";
 import SectionHeader from "@/components/primitives/SectionHeader";
 import InfiniteMarquee from "@/components/primitives/InfiniteMarquee";
+import { FadeIn } from "@/components/animations/FadeIn";
 
 interface Tech {
   name: string;
@@ -99,31 +99,6 @@ const TechStack = () => {
         </div>
       </FadeIn>
     </section>
-  );
-};
-
-// Local FadeIn shortcut to avoid an extra file import — Framer-powered
-const FadeIn = ({
-  children,
-  delay = 0,
-}: {
-  children: React.ReactNode;
-  delay?: number;
-}) => {
-  const shouldReduceMotion = useReducedMotion();
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{
-        duration: 0.5,
-        delay,
-        ease: [0.25, 0.1, 0.25, 1],
-      }}
-    >
-      {children}
-    </motion.div>
   );
 };
 

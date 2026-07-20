@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState, Suspense } from "react";
-import { motion } from "framer-motion";
 import SectionHeader from "@/components/primitives/SectionHeader";
 import BentoCard from "@/components/primitives/BentoCard";
 import GlowBadge from "@/components/primitives/GlowBadge";

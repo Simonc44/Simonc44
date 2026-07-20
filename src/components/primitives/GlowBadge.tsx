@@ -1,4 +1,5 @@
 import { Sparkles, Radio, Github, Star } from "lucide-react";
+import { useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 export type GlowBadgeVariant = "new" | "live" | "oss" | "star";
@@ -40,12 +41,15 @@ const GlowBadge = ({
   className,
   iconOnly = false,
 }: GlowBadgeProps) => {
+  // `animate-pulse` is unconditional motion — gate on the user's OS-level
+  // prefers-reduced-motion preference to respect accessibility settings.
+  const shouldReduceMotion = useReducedMotion();
   return (
     <span
       className={cn(
         "inline-flex items-center gap-1.5 text-xs font-medium rounded-full px-2.5 py-1 border backdrop-blur-sm",
         "font-mono uppercase tracking-wider",
-        variant === "live" && "animate-pulse",
+        variant === "live" && !shouldReduceMotion && "animate-pulse",
         variantStyles[variant],
         className
       )}

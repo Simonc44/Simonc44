@@ -1,6 +1,5 @@
 import { useState } from "react";
 import {
-  Mail,
   Linkedin,
   Instagram,
   Github,
@@ -12,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import GlowBadge from "@/components/primitives/GlowBadge";
 import CommandBlock from "@/components/primitives/CommandBlock";
+import { FadeIn } from "@/components/animations/FadeIn";
 
 const CONTACT_EMAIL = "simon.chusseau@gmail.com";
 
@@ -169,22 +169,5 @@ const Contact = () => {
     </section>
   );
 };
-
-const FadeIn = ({
-  children,
-  delay = 0,
-}: {
-  children: React.ReactNode;
-  delay?: number;
-}) => (
-  <motion.div
-    initial={{ opacity: 0, y: 16 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
-    transition={{ duration: 0.55, delay, ease: [0.25, 0.1, 0.25, 1] }}
-  >
-    {children}
-  </motion.div>
-);
 
 export default Contact;
