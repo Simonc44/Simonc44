@@ -74,6 +74,7 @@ const DICTIONARIES = {
     "projects.title": "Ce que j'ai livré",
     "projects.subtitle":
       "Produits en production, projets open-source et missions clients. Filtrez par catégorie.",
+    "projects.category.all": "Tout",
     "projects.category.ai": "IA",
     "projects.category.civictech": "Civic Tech",
     "projects.category.devtools": "Devtools",
@@ -198,6 +199,7 @@ const DICTIONARIES = {
     "projects.title": "What I've shipped",
     "projects.subtitle":
       "Production products, open-source projects and client missions. Filter by category.",
+    "projects.category.all": "All",
     "projects.category.ai": "AI",
     "projects.category.civictech": "Civic Tech",
     "projects.category.devtools": "DevTools",
@@ -314,6 +316,7 @@ const DICTIONARIES = {
     "projects.title": "Lo que he enviado",
     "projects.subtitle":
       "Productos en producción, proyectos open-source y misiones cliente. Filtrá por categoría.",
+    "projects.category.all": "Todo",
     "projects.category.ai": "IA",
     "projects.category.civictech": "Civic Tech",
     "projects.category.devtools": "DevTools",

@@ -6,30 +6,63 @@ import { TechStack } from "@/components/TechStack";
 import { Projects } from "@/components/Projects";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
+import { WavyTicker } from "@/components/WavyTicker";
+import { XChatWindow } from "@/components/XChatWindow";
+import type { GithubData } from "@/types/github";
 
 /**
- * Root route. Server component — just composes the page tree. The Hero
- * receives `modelUrl` so the 3D scene tries to load `/models/hero.glb`
- * on first render. Drop your .glb into `public/models/` (see
- * `public/models/README.md` for the workflow) and it will swap in.
- *
- * Set `modelUrl={undefined}` (or omit) to keep the procedural
- * fallback torus knot.
+ * Server Component — fetches GitHub data at build time / ISR (1h).
+ * Injects real data into Projects and About without client-side waterfalls.
  */
-export default function Page() {
+async function fetchGithubData(): Promise<GithubData | null> {
+  try {
+    // In production, use the absolute URL from NEXT_PUBLIC_SITE_URL.
+    // In development, we call the API route directly from the server.
+    const baseUrl =
+      process.env.NEXT_PUBLIC_SITE_URL ??
+      (process.env.VERCEL_URL
+        ? `https://${process.env.VERCEL_URL}`
+        : "http://localhost:3000");
+
+    const res = await fetch(`${baseUrl}/api/github`, {
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return null;
+    return res.json() as Promise<GithubData>;
+  } catch {
+    return null;
+  }
+}
+
+export default async function Page() {
+  const githubData = await fetchGithubData();
+
   return (
-    <main className="relative min-h-screen overflow-hidden">
+    <main className="relative min-h-screen overflow-x-hidden">
       <Navbar />
-      {/* 3D scenes suspend on HDR + .glb loading; outer Suspense keeps the
-          page tree responsive while R3F mounts. */}
+
+      {/* Hero — 3D scroll-driven scene */}
       <Suspense fallback={null}>
-        <Hero modelUrl="/models/hero.glb" />
+        <Hero />
       </Suspense>
-      <About />
+
+      {/* WavyTicker — real skills from GitHub language data */}
+      <WavyTicker
+        languages={githubData?.aggregatedLanguages ?? null}
+        repos={githubData?.repos ?? null}
+      />
+
+      <About profile={githubData?.profile ?? null} repos={githubData?.repos ?? null} />
+
       <TechStack />
-      <Projects />
+
+      <Projects repos={githubData?.repos ?? null} />
+
       <Contact />
       <Footer />
+
+      {/* Floating chat window — always mounted, visibility toggled internally */}
+      <XChatWindow />
     </main>
   );
 }

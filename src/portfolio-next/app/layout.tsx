@@ -11,22 +11,36 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "S.C — Architecte de solutions numériques",
+  title: "Simon Chusseau — Architecte de solutions numériques",
   description:
-    "Portfolio interactif d'un architecte de solutions numériques. C++, Three.js, Generative Art, Indie Hacker.",
-  authors: [{ name: "S.C" }],
+    "Portfolio de Simon Chusseau — architecte de solutions numériques. TypeScript, Rust, Python, Three.js, IA. Indie maker & créateur de CygnisAI, Mandat, OmniMCP.",
+  authors: [{ name: "Simon Chusseau" }],
   keywords: [
     "portfolio",
+    "simon chusseau",
     "three.js",
     "react-three-fiber",
     "indie maker",
-    "ai",
+    "cygnis ai",
+    "mandat",
+    "omnimcp",
+    "typescript",
+    "rust",
     "creative developer",
   ],
+  openGraph: {
+    title: "Simon Chusseau — Architecte de solutions numériques",
+    description:
+      "TypeScript · Rust · Python · Three.js · IA — du prototype à la production.",
+    url: "https://simon-chusseau.vercel.app",
+    siteName: "Simon Chusseau",
+    locale: "fr_FR",
+    type: "website",
+  },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0a0a0f",
+  themeColor: "#030303",
   colorScheme: "dark",
   width: "device-width",
   initialScale: 1,
