@@ -5,30 +5,18 @@ import { TechStack } from "@/components/TechStack";
 import { Projects } from "@/components/Projects";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
-import type { GithubData } from "@/types/github";
 import { ClientApp } from "@/components/ClientApp";
+import { getGithubData } from "@/lib/github";
 
 export const dynamic = "force-dynamic";
 
-async function fetchGithubData(): Promise<GithubData | null> {
-  try {
-    const baseUrl =
-      process.env.NEXT_PUBLIC_SITE_URL ??
-      (process.env.VERCEL_URL
-        ? `https://${process.env.VERCEL_URL}`
-        : "http://localhost:3000");
-
-    const res = await fetch(`${baseUrl}/api/github`);
-    if (!res.ok) return null;
-    const data: GithubData = await res.json();
-    return data;
-  } catch {
-    return null;
-  }
-}
-
 export default async function Page() {
-  const githubData = await fetchGithubData();
+  let githubData = null;
+  try {
+    githubData = await getGithubData();
+  } catch {
+    // GitHub API indisponible → affichage sans données
+  }
 
   return (
     <main className="relative min-h-screen overflow-x-hidden selection:bg-white/20 selection:text-white">
