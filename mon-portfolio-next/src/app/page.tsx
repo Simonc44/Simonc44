@@ -8,6 +8,8 @@ import { Footer } from "@/components/Footer";
 import type { GithubData } from "@/types/github";
 import { ClientApp } from "@/components/ClientApp";
 
+export const dynamic = "force-dynamic";
+
 async function fetchGithubData(): Promise<GithubData | null> {
   try {
     const baseUrl =
@@ -16,9 +18,7 @@ async function fetchGithubData(): Promise<GithubData | null> {
         ? `https://${process.env.VERCEL_URL}`
         : "http://localhost:3000");
 
-    const res = await fetch(`${baseUrl}/api/github`, {
-      next: { revalidate: 3600 },
-    });
+    const res = await fetch(`${baseUrl}/api/github`);
     if (!res.ok) return null;
     const data: GithubData = await res.json();
     return data;
