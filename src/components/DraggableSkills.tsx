@@ -66,8 +66,8 @@ export default function DraggableSkills() {
         </p>
 
         <div
-          className="relative mx-auto select-none"
-          style={{ width: 460, height: SKILLS.length * ITEM_H }}
+          className="relative mx-auto select-none w-full max-w-[480px]"
+          style={{ height: SKILLS.length * ITEM_H }}
           onPointerMove={onPointerMove}
           onPointerUp={endDrag}
           onPointerLeave={endDrag}

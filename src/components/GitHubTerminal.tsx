@@ -1,86 +1,238 @@
-import { Terminal } from "lucide-react";
+import { useState } from "react";
+import { Terminal, Loader2, AlertCircle, Copy, Check } from "lucide-react";
+import { useGitHubProfile, useGitHubRepos } from "@/hooks/use-github";
+import { getGitHubContributionChartUrl } from "@/lib/github";
+import SectionHeader from "@/components/primitives/SectionHeader";
+import GlowBadge from "@/components/primitives/GlowBadge";
+
+type Tab = "overview" | "heatmap" | "repos";
+const TABS: { id: Tab; label: string }[] = [
+  { id: "overview", label: "Overview" },
+  { id: "heatmap", label: "Heatmap" },
+  { id: "repos", label: "Repositories" },
+];
 
 const GitHubTerminal = () => {
+  const { data: profile, isLoading: profileLoading, error: profileError } =
+    useGitHubProfile();
+  const { data: repos, isLoading: reposLoading } = useGitHubRepos();
+  const [tab, setTab] = useState<Tab>("overview");
+  const [copiedHandle, setCopiedHandle] = useState(false);
+
+  const isLoading = profileLoading || reposLoading;
+  const error = profileError;
+
+  const onCopyHandle = async () => {
+    try {
+      if (!profile?.login) return;
+      await navigator.clipboard.writeText(`https://github.com/${profile.login}`);
+      setCopiedHandle(true);
+      setTimeout(() => setCopiedHandle(false), 1800);
+    } catch {
+      /* noop */
+    }
+  };
+
   return (
-    <section id="terminal" className="py-20 px-4 bg-background relative overflow-hidden">
-      {/* Background glow elements */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent pointer-events-none" />
+    <section id="terminal" className="py-24 px-4 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-radial from-primary/[0.06] via-transparent to-transparent pointer-events-none" />
 
-      <div className="container max-w-6xl mx-auto relative z-10">
-        <div className="text-center mb-12 space-y-4">
-          <h2 className="text-4xl md:text-5xl font-bold">
-            My GitHub <span className="text-gradient">Terminal</span>
-          </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            A real-time, interactive dashboard showcasing my profile statistics, tech stack, and contribution history directly from GitHub.
-          </p>
-        </div>
+      <div className="container max-w-6xl mx-auto relative z-10 space-y-10">
+        <SectionHeader
+          index="03 / Engine"
+          title="Live from my GitHub."
+          description="A live window into my repos, contribution heatmap and recent shipping."
+          eyebrow={<GlowBadge variant="oss">Open source feed</GlowBadge>}
+        />
 
-        {/* Terminal Wrapper */}
-        <div className="bg-slate-950/80 backdrop-blur-md rounded-2xl border border-primary/20 shadow-glow overflow-hidden max-w-5xl mx-auto transition-all duration-500 hover:border-primary/40">
-          {/* Terminal Title Bar */}
-          <div className="bg-card/80 border-b border-primary/10 px-6 py-4 flex items-center justify-between">
-            <div className="flex gap-2">
-              <span className="w-3.5 h-3.5 rounded-full bg-red-500/80 hover:bg-red-500 transition-colors cursor-pointer" />
-              <span className="w-3.5 h-3.5 rounded-full bg-yellow-500/80 hover:bg-yellow-500 transition-colors cursor-pointer" />
-              <span className="w-3.5 h-3.5 rounded-full bg-green-500/80 hover:bg-green-500 transition-colors cursor-pointer" />
+        {/* Glass product window */}
+        <div className="rounded-2xl overflow-hidden border border-white/[0.06] bg-card/[0.05] backdrop-blur-md shadow-card transition-all duration-500 hover:border-primary/30">
+          {/* Title bar */}
+          <div className="bg-secondary/40 border-b border-white/[0.06] px-4 py-3 flex items-center justify-between">
+            <div className="flex gap-1.5">
+              <span className="w-3 h-3 rounded-full bg-red-400/80" />
+              <span className="w-3 h-3 rounded-full bg-amber-400/80" />
+              <span className="w-3 h-3 rounded-full bg-emerald-400/80" />
             </div>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground font-mono">
-              <Terminal className="w-4 h-4 text-primary" />
-              simon@github: ~
+            <div className="hidden sm:flex items-center gap-2 text-xs font-mono text-muted-foreground">
+              <Terminal className="w-3.5 h-3.5 text-primary" />
+              simon@github:~
             </div>
-            <div className="w-14" /> {/* Spacer to center the title */}
+            <GlowBadge variant="live">Live</GlowBadge>
           </div>
 
-          {/* Terminal Body */}
-          <div className="p-6 md:p-8 space-y-8 font-mono">
-            {/* Heatmap Section */}
-            <div className="space-y-4">
-              <div className="flex items-center gap-2 text-sm md:text-base text-primary/80">
-                <span className="text-green-400 font-bold">simon@github</span>
-                <span className="text-muted-foreground">:</span>
-                <span className="text-blue-400 font-bold">~</span>
-                <span className="text-muted-foreground">$</span>
-                <span className="text-foreground">./contributions.sh --graph</span>
+          {/* Tabs */}
+          <div
+            className="flex items-center gap-1 px-4 py-2 border-b border-white/[0.06] bg-secondary/20 overflow-x-auto"
+            role="tablist"
+            aria-label="GitHub terminal tabs"
+          >
+            {TABS.map((t) => (
+              <button
+                key={t.id}
+                role="tab"
+                aria-selected={tab === t.id}
+                onClick={() => setTab(t.id)}
+                className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
+                  tab === t.id
+                    ? "bg-primary/15 text-primary"
+                    : "text-muted-foreground hover:text-foreground hover:bg-primary/5"
+                }`}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Panel body */}
+          <div className="p-5 md:p-7 font-mono text-sm min-h-[420px]">
+            {tab === "overview" && (
+              <div className="space-y-6">
+                <div className="flex items-center gap-2 text-primary/90">
+                  <span className="text-emerald-400 font-bold">
+                    simon@github
+                  </span>
+                  <span className="text-muted-foreground">:</span>
+                  <span className="text-blue-400 font-bold">~</span>
+                  <span className="text-muted-foreground">$</span>
+                  <span className="text-foreground">neofetch</span>
+                </div>
+
+                {isLoading && (
+                  <div className="flex items-center gap-2 text-blue-400">
+                    <Loader2 className="animate-spin w-4 h-4" />
+                    <span>Loading GitHub data...</span>
+                  </div>
+                )}
+                {error && (
+                  <div className="flex items-start gap-2 text-red-400">
+                    <AlertCircle className="w-4 h-4 mt-0.5" />
+                    <span>
+                      API rate limit may have been exceeded. Please try again
+                      later.
+                    </span>
+                  </div>
+                )}
+
+                {profile && (
+                  <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-center md:items-start">
+                    <img
+                      src={profile.avatar_url}
+                      alt={profile.name || profile.login}
+                      className="w-32 h-32 md:w-40 md:h-40 rounded-xl grayscale contrast-125 brightness-90 border border-white/[0.06] object-cover"
+                    />
+                    <div className="space-y-2 border-l-2 border-primary/30 pl-6 w-full">
+                      <p>
+                        <span className="text-emerald-400">User</span>:{" "}
+                        {profile.name || profile.login}
+                      </p>
+                      <p>
+                        <span className="text-emerald-400">Bio</span>:{" "}
+                        {profile.bio || "Software Developer"}
+                      </p>
+                      <p>
+                        <span className="text-emerald-400">Repos</span>:{" "}
+                        {profile.public_repos}
+                      </p>
+                      <p>
+                        <span className="text-emerald-400">Followers</span>:{" "}
+                        {profile.followers}
+                      </p>
+                      <button
+                        onClick={onCopyHandle}
+                        className="mt-2 inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-primary transition-colors"
+                      >
+                        github.com/{profile.login}
+                        {copiedHandle ? (
+                          <Check className="w-3.5 h-3.5 text-emerald-400" />
+                        ) : (
+                          <Copy className="w-3.5 h-3.5" />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
-              <div className="overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-primary/20 scrollbar-track-transparent">
-                <div className="min-w-[860px] mx-auto">
+            )}
+
+            {tab === "heatmap" && (
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 text-primary/90">
+                  <span className="text-emerald-400 font-bold">
+                    simon@github
+                  </span>
+                  <span className="text-muted-foreground">:</span>
+                  <span className="text-blue-400 font-bold">~</span>
+                  <span className="text-muted-foreground">$</span>
+                  <span className="text-foreground">
+                    ./contributions.sh --graph
+                  </span>
+                </div>
+                <div className="overflow-x-auto pb-4 rounded-xl border border-white/[0.06] bg-background/40 p-4">
                   <img
-                    src="/contrib-heatmap.svg"
+                    src={getGitHubContributionChartUrl()}
                     alt="GitHub Contributions Heatmap"
-                    className="w-full h-auto rounded-lg border border-primary/5 shadow-md"
+                    className="w-full h-auto min-w-[640px]"
                   />
                 </div>
+                <p className="text-xs text-muted-foreground">
+                  Updated daily · fetched from GitHub's public contribution API.
+                </p>
               </div>
-            </div>
+            )}
 
-            {/* Profile & Info Card Section */}
-            <div className="space-y-4 pt-4 border-t border-primary/10">
-              <div className="flex items-center gap-2 text-sm md:text-base text-primary/80">
-                <span className="text-green-400 font-bold">simon@github</span>
-                <span className="text-muted-foreground">:</span>
-                <span className="text-blue-400 font-bold">~</span>
-                <span className="text-muted-foreground">$</span>
-                <span className="text-foreground">whoami && neofetch</span>
-              </div>
+            {tab === "repos" && (
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 text-primary/90">
+                  <span className="text-emerald-400 font-bold">
+                    simon@github
+                  </span>
+                  <span className="text-muted-foreground">:</span>
+                  <span className="text-blue-400 font-bold">~</span>
+                  <span className="text-muted-foreground">$</span>
+                  <span className="text-foreground">git log --oneline</span>
+                </div>
 
-              <div className="grid lg:grid-cols-12 gap-6 items-start justify-center">
-                <div className="lg:col-span-5 flex justify-center">
-                  <img
-                    src="/profile-ascii.svg"
-                    alt="Simon's Monochrome ASCII Portrait"
-                    className="w-full max-w-[370px] h-auto rounded-lg border border-primary/5 shadow-md"
-                  />
-                </div>
-                <div className="lg:col-span-7 flex justify-center">
-                  <img
-                    src="/info-card.svg"
-                    alt="Simon's Terminal Info Card"
-                    className="w-full max-w-[490px] h-auto rounded-lg border border-primary/5 shadow-md"
-                  />
-                </div>
+                {reposLoading && (
+                  <div className="flex items-center gap-2 text-blue-400">
+                    <Loader2 className="animate-spin w-4 h-4" />
+                    <span>Loading repositories…</span>
+                  </div>
+                )}
+
+                {repos && repos.length > 0 && (
+                  <ul className="divide-y divide-white/5">
+                    {repos.map((repo) => (
+                      <li key={repo.id} className="py-3">
+                        <div className="flex items-center justify-between gap-4 flex-wrap">
+                          <a
+                            href={repo.html_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="font-bold underline decoration-primary/30 hover:text-primary transition-colors"
+                          >
+                            {repo.name}
+                          </a>
+                          <div className="flex items-center gap-3 text-xs">
+                            <span className="text-muted-foreground">
+                              {repo.language || "Markdown"}
+                            </span>
+                            <span className="text-amber-300 font-mono">
+                              ★ {repo.stargazers_count}
+                            </span>
+                          </div>
+                        </div>
+                        {repo.description && (
+                          <p className="mt-1 text-xs text-muted-foreground">
+                            {repo.description}
+                          </p>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

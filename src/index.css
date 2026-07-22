@@ -1,63 +1,82 @@
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/jetbrains-mono";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* ──────────────────────────────────────────
-   Design tokens — all colors MUST be HSL
-   Signature: dark navy · electric blue · violet
+   Design tokens — Cinematic Dark Edition
+   Inspired by Freebuff / Linear / Vercel
+   Signature: deep violet · warm coral · cinematic glow
    ────────────────────────────────────────── */
 
 @layer base {
   :root {
-    --background: 222 47% 10%;
-    --foreground: 210 40% 98%;
+    /* Background: near-black with a hint of cool blue */
+    --background: 240 22% 4%;
+    --foreground: 220 25% 96%;
 
-    --card: 222 47% 13%;
-    --card-foreground: 210 40% 98%;
+    --card: 240 20% 7%;
+    --card-foreground: 220 25% 96%;
 
-    --popover: 222 47% 13%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 240 22% 5%;
+    --popover-foreground: 220 25% 96%;
 
-    --primary: 217 91% 60%;
-    --primary-foreground: 222 47% 10%;
-    --primary-glow: 260 80% 70%;
+    /* Electric violet — primary glow */
+    --primary: 263 75% 68%;
+    --primary-foreground: 240 22% 4%;
+    --primary-glow: 263 75% 68%;
 
-    --secondary: 217 32% 22%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 240 12% 12%;
+    --secondary-foreground: 220 25% 96%;
 
-    --muted: 217 32% 18%;
-    --muted-foreground: 215 20% 58%;
+    --muted: 240 12% 14%;
+    --muted-foreground: 220 12% 65%;
 
-    --accent: 260 80% 65%;
-    --accent-foreground: 210 40% 98%;
+    /* Warm coral */
+    --accent: 340 80% 62%;
+    --accent-foreground: 240 22% 4%;
 
-    --destructive: 0 63% 50%;
-    --destructive-foreground: 210 40% 98%;
+    /* Status colors */
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 220 25% 96%;
+    --success: 142 70% 50%;
 
-    --border: 217 32% 20%;
-    --input: 217 32% 20%;
-    --ring: 217 91% 60%;
-    --radius: 0.75rem;
+    --border: 240 12% 16%;
+    --input: 240 12% 16%;
+    --ring: 263 75% 68%;
+    --radius: 0.85rem;
 
-    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(260 80% 70%) 100%);
-    --gradient-card: linear-gradient(135deg, hsl(222 47% 13% / 0.9) 0%, hsl(222 47% 16% / 0.7) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(263 75% 68%) 0%, hsl(340 80% 62%) 100%);
+    --gradient-card: linear-gradient(135deg, hsl(240 20% 9% / 0.8) 0%, hsl(240 18% 6% / 0.6) 100%);
     --gradient-hero:
-      radial-gradient(ellipse at 25% 25%, hsl(217 91% 60% / 0.13), transparent 55%),
-      radial-gradient(ellipse at 75% 75%, hsl(260 80% 70% / 0.10), transparent 55%);
+      radial-gradient(ellipse at 20% 15%, hsl(263 75% 68% / 0.18) 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 85%, hsl(340 80% 62% / 0.12) 0%, transparent 55%),
+      radial-gradient(ellipse at 50% 50%, hsl(220 50% 50% / 0.04) 0%, transparent 60%);
 
-    --shadow-glow: 0 0 40px hsl(217 91% 60% / 0.25), 0 0 80px hsl(260 80% 70% / 0.15);
-    --shadow-card: 0 10px 40px -10px hsl(0 0% 0% / 0.6);
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --shadow-glow: 0 0 60px hsl(263 75% 68% / 0.25), 0 0 120px hsl(340 80% 62% / 0.12);
+    --shadow-card: 0 8px 40px -10px hsl(0 0% 0% / 0.6);
+
+    --font-display: "Inter Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-mono: "JetBrains Mono Variable", ui-monospace, "Cascadia Code", "Fira Code", monospace;
   }
 }
 
 @layer base {
-  * { @apply border-border; }
-  body {
-    @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+  * {
+    @apply border-border;
   }
-  html { scroll-behavior: smooth; }
+  html {
+    scroll-behavior: smooth;
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-display);
+    font-feature-settings: "cv11", "ss01", "ss03";
+    text-rendering: optimizeLegibility;
+  }
 }
 
 @layer utilities {
@@ -67,99 +86,109 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-  .bg-gradient-card  { background: var(--gradient-card); }
-  .bg-gradient-hero  { background: var(--gradient-hero); }
-  .bg-gradient-primary { background: var(--gradient-primary); }
-  .shadow-glow  { box-shadow: var(--shadow-glow); }
-  .shadow-card  { box-shadow: var(--shadow-card); }
-  .hover\:shadow-glow:hover { box-shadow: var(--shadow-glow); }
-
-  .animate-fade-in { animation: fadeIn 0.8s ease-out both; }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: translateY(0); }
+  .bg-gradient-card {
+    background: var(--gradient-card);
+  }
+  .bg-gradient-hero {
+    background: var(--gradient-hero);
+  }
+  .bg-gradient-primary {
+    background: var(--gradient-primary);
+  }
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+  .hover\:shadow-glow:hover {
+    box-shadow: var(--shadow-glow);
   }
 
-  /* ── CSS-only cycling typing animation (Google-Translate-safe) ────────────
-     Works exactly like the reference site: span::before uses content:
-     to swap the text — React never touches a managed text node.
-  ──────────────────────────────────────────────────────────────────────── */
-  .hero-role-wrapper {
-    height: 2.4rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .font-display {
+    font-family: var(--font-display);
+    font-feature-settings: "cv11", "ss01";
+    letter-spacing: -0.02em;
   }
-  @media (min-width: 768px) {
-    .hero-role-wrapper { justify-content: flex-start; }
+  .font-mono {
+    font-family: var(--font-mono);
+    font-feature-settings: "calt", "liga";
   }
 
-  .hero-role {
-    font-size: 1.25rem;
-    font-family: ui-monospace, "Cascadia Code", monospace;
-    color: hsl(215 20% 58%);
-    white-space: nowrap;
-    overflow: hidden;
-    border-right: 2px solid hsl(217 91% 60%);
-    width: 0;
-    animation:
-      roleType    7s steps(30, end)  infinite,
-      roleBlink   0.75s step-end     infinite,
-      roleSwitch  28s step-start     infinite;
+  .mask-fade-x {
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
   }
 
-  /* span::before holds the text — Google Translate can't crash React */
-  .hero-role::before {
-    content: "Full-Stack Developer";
-    animation: roleContent 28s step-start infinite;
+  .vignette-x {
+    -webkit-mask-image: radial-gradient(ellipse 90% 60% at 50% 40%, black 40%, transparent 100%);
+    mask-image: radial-gradient(ellipse 90% 60% at 50% 40%, black 40%, transparent 100%);
   }
 
-  @keyframes roleContent {
-    0%   { content: "Full-Stack Developer"; }
-    25%  { content: "Indie Maker"; }
-    50%  { content: "AI Builder"; }
-    75%  { content: "Open Source Contributor"; }
-    100% { content: "Full-Stack Developer"; }
+  /* ── Tilt-aware glass overlays (kept from previous round) ── */
+  @media (hover: none) and (pointer: coarse) {
+    .tilt-3d {
+      transform: none !important;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tilt-3d {
+      transform: none !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
   }
 
-  /* Expand / collapse the box to simulate typing */
-  @keyframes roleType {
-    0%   { width: 0; }
-    40%  { width: 22ch; }
-    60%  { width: 22ch; }
-    90%  { width: 0; }
-    100% { width: 0; }
+  /* ── Global chat-bubble hover affordance when text is selectable ── */
+  .chat-bubble {
+    user-select: text;
   }
 
-  @keyframes roleBlink {
-    0%, 100% { border-color: hsl(217 91% 60%); }
-    50%       { border-color: transparent; }
+  /* ── Glow border tracker ──
+     The mask-composite trick confines a child element's painted region
+     to just the outer ring (between content-box and border-box). The
+     element's `background` is a radial gradient (cursor-tracking) so
+     only the border area illuminates, never the card interior.
+
+     Padding: N sets the ring width to N px on every side. The two-layer
+     mask technique:
+       1. linear-gradient(#fff 0 0) content-box → paints only the inner
+          content-box area (everything except the padding ring).
+       2. linear-gradient(#fff 0 0) → paints the entire element box.
+       3. mask-composite: exclude → keeps #2 minus #1 = the ring only.
+
+     Browsers without mask-composite fall back to a soft-glow look since
+     the inner content is still above the glow layer (z-10 on the host).
+  */
+  .glow-border-tracker {
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask-composite: exclude;
   }
 
-  /* Blinking cursor after the prompt */
-  .hero-cursor {
-    display: inline-block;
-    width: 8px;
-    height: 1em;
-    background: hsl(217 91% 60%);
-    vertical-align: middle;
-    animation: cursorBlink 1s step-end infinite;
-    margin-left: 2px;
-  }
-  @keyframes cursorBlink {
-    0%, 100% { opacity: 1; }
-    50%       { opacity: 0; }
+  /* When mask-composite isn't supported, fade the glow slightly so the
+     interior isn't blown out. */
+  @supports not (mask-composite: exclude) {
+    .glow-border-tracker {
+      padding: 0 !important;
+      opacity: 0.65;
+    }
   }
 
-  /* ── subtle noise grain on body ── */
+  /* ── Subtle filmic noise on body ── */
   body::before {
     content: "";
     position: fixed;
     inset: 0;
     pointer-events: none;
     z-index: 0;
-    opacity: 0.025;
+    opacity: 0.04;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
   }
 }

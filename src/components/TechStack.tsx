@@ -1,47 +1,129 @@
-const TECHNOLOGIES = [
-  { name: "React", icon: "⚛️", color: "from-cyan-400/20 to-blue-500/20", border: "border-cyan-400/30" },
-  { name: "TypeScript", icon: "🔷", color: "from-blue-500/20 to-blue-700/20", border: "border-blue-500/30" },
-  { name: "Next.js", icon: "▲", color: "from-white/10 to-gray-300/10", border: "border-white/20", iconClass: "text-white font-bold" },
-  { name: "Tailwind CSS", icon: "🌊", color: "from-cyan-400/20 to-teal-500/20", border: "border-cyan-400/30" },
-  { name: "Firebase", icon: "🔥", color: "from-yellow-400/20 to-orange-500/20", border: "border-yellow-400/30" },
-  { name: "Node.js", icon: "🟢", color: "from-green-500/20 to-green-700/20", border: "border-green-500/30" },
-  { name: "Vite", icon: "⚡", color: "from-purple-400/20 to-yellow-400/20", border: "border-purple-400/30" },
-  { name: "TanStack", icon: "🔗", color: "from-red-400/20 to-orange-400/20", border: "border-red-400/30" },
-  { name: "Turso / SQLite", icon: "🗄️", color: "from-teal-400/20 to-cyan-600/20", border: "border-teal-400/30" },
-  { name: "Vercel", icon: "▲", color: "from-white/10 to-gray-400/10", border: "border-white/20", iconClass: "text-white font-bold" },
-  { name: "Google Gemini", icon: "✨", color: "from-blue-400/20 to-purple-500/20", border: "border-blue-400/30" },
-  { name: "Groq", icon: "🤖", color: "from-orange-400/20 to-red-500/20", border: "border-orange-400/30" },
+import {
+  ReactIcon,
+  TypeScriptIcon,
+  NextJsIcon,
+  TailwindIcon,
+  FirebaseIcon,
+  NodeJsIcon,
+  ViteIcon,
+  DatabaseIcon,
+  GeminiIcon,
+  GroqIcon,
+  TanStackIcon,
+  VercelIcon,
+} from "@/components/tech-stack-icons";
+import SectionHeader from "@/components/primitives/SectionHeader";
+import WavyMarquee from "@/components/primitives/WavyMarquee";
+import { FadeIn } from "@/components/animations/FadeIn";
+
+interface Tech {
+  name: string;
+  icon: React.ComponentType<{ className?: string }>;
+  color: string;
+}
+
+const FRONTEND: Tech[] = [
+  { name: "React", icon: ReactIcon, color: "text-sky-300" },
+  { name: "TypeScript", icon: TypeScriptIcon, color: "text-blue-400" },
+  { name: "Next.js", icon: NextJsIcon, color: "text-foreground" },
+  { name: "Tailwind CSS", icon: TailwindIcon, color: "text-cyan-300" },
+  { name: "Vite", icon: ViteIcon, color: "text-violet-300" },
+  { name: "TanStack", icon: TanStackIcon, color: "text-rose-300" },
 ];
+
+const BACKEND_AI: Tech[] = [
+  { name: "Node.js", icon: NodeJsIcon, color: "text-green-400" },
+  { name: "Firebase", icon: FirebaseIcon, color: "text-amber-400" },
+  { name: "Turso / SQLite", icon: DatabaseIcon, color: "text-teal-300" },
+  { name: "Vercel", icon: VercelIcon, color: "text-foreground" },
+  { name: "Google Gemini", icon: GeminiIcon, color: "text-blue-300" },
+  { name: "Groq", icon: GroqIcon, color: "text-orange-300" },
+];
+
+const TechChip = ({ tech }: { tech: Tech }) => {
+  const Icon = tech.icon;
+  return (
+    <div className="flex items-center gap-3 rounded-full border border-white/[0.06] bg-card/[0.04] backdrop-blur-md pl-3 pr-5 py-2.5 whitespace-nowrap hover:border-primary/30 transition-colors">
+      <Icon className={`w-5 h-5 ${tech.color}`} />
+      <span className="text-sm font-medium text-foreground/90">
+        {tech.name}
+      </span>
+    </div>
+  );
+};
+
+const WavyChipRow = ({
+  items,
+  speed,
+  amplitude,
+  freq,
+  phase,
+  gap,
+}: {
+  items: Tech[];
+  speed: number;
+  amplitude: number;
+  freq: number;
+  phase: number;
+  gap: number;
+}) => (
+  <WavyMarquee
+    speed={speed}
+    amplitude={amplitude}
+    freq={freq}
+    phase={phase}
+    gap={gap}
+  >
+    {items.map((tech) => (
+      <TechChip key={`${tech.name}-${phase}`} tech={tech} />
+    ))}
+  </WavyMarquee>
+);
 
 const TechStack = () => {
   return (
-    <section id="tech" className="py-24 px-4">
-      <div className="container max-w-6xl mx-auto">
-        <p className="text-sm font-mono text-primary/70 tracking-widest uppercase text-center mb-3">
-          Tools of the trade
-        </p>
-        <h2 className="text-4xl md:text-5xl font-bold mb-4 text-center">
-          My <span className="text-gradient">Tech Stack</span>
-        </h2>
-        <p className="text-muted-foreground text-center mb-14 text-lg max-w-xl mx-auto">
-          Technologies I reach for to bring ideas to production.
-        </p>
+    <section
+      id="tech"
+      className="py-24 px-4 relative overflow-hidden space-y-12"
+    >
+      <div className="absolute inset-0 bg-gradient-radial from-primary/[0.06] via-transparent to-transparent pointer-events-none" />
 
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4">
-          {TECHNOLOGIES.map((tech, index) => (
-            <div
-              key={tech.name}
-              className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${tech.color} border ${tech.border} p-4 flex flex-col items-center gap-2.5 hover:scale-105 hover:shadow-glow transition-all duration-300`}
-              style={{ animationDelay: `${index * 60}ms` }}
-            >
-              <span className={`text-3xl leading-none ${tech.iconClass ?? ""}`}>{tech.icon}</span>
-              <span className="text-xs font-medium text-center text-muted-foreground group-hover:text-foreground transition-colors leading-tight">
-                {tech.name}
-              </span>
-            </div>
-          ))}
-        </div>
+      <div className="container max-w-6xl mx-auto relative z-10">
+        <SectionHeader
+          index="02 / Stack"
+          title="The stack I ship with."
+          description="Tools I reach for to bring ideas to production. The list grows every sprint — try not to blink."
+        />
       </div>
+
+      <div className="relative space-y-3">
+        {/* Top row: 2 sine cycles, baseline Y=0 */}
+        <WavyChipRow
+          items={FRONTEND}
+          speed={32}
+          amplitude={20}
+          freq={Math.PI * 2 * 2}
+          phase={0}
+          gap={20}
+        />
+        {/* Bottom row: counter-phase (pi) so the two rows visually oppose */}
+        <WavyChipRow
+          items={BACKEND_AI}
+          speed={42}
+          amplitude={20}
+          freq={Math.PI * 2 * 1.6}
+          phase={Math.PI}
+          gap={20}
+        />
+      </div>
+
+      <FadeIn delay={0.2}>
+        <div className="container max-w-6xl mx-auto pt-4">
+          <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground text-center">
+            12+ technologies · always evolving
+          </p>
+        </div>
+      </FadeIn>
     </section>
   );
 };
