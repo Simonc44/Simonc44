@@ -134,7 +134,6 @@ export function ShaderBg() {
         }}
         pixelDensity={1.5}
         fov={45}
-        frameloop="always"
         onCreated={handleCreated}
       >
         <ShaderGradient
