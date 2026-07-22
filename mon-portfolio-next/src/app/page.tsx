@@ -20,7 +20,12 @@ async function fetchGithubData(): Promise<GithubData | null> {
       next: { revalidate: 3600 },
     });
     if (!res.ok) return null;
-    return res.json() as Promise<GithubData>;
+    const text = await res.text();
+    try {
+      return JSON.parse(text) as GithubData;
+    } catch {
+      return null;
+    }
   } catch {
     return null;
   }
