@@ -7,7 +7,8 @@ import type { WebGLRenderer, Scene, Camera } from "three";
 // ── Suppression du warning THREE.Clock (bibliothèque tierce) ─────
 const _origWarn = console.warn.bind(console);
 console.warn = (msg: unknown, ...rest: unknown[]) => {
-  if (typeof msg === "string" && msg.includes("THREE.Clock")) return;
+  if (typeof msg === "string" &&
+    (msg.includes("THREE.Clock") || msg.includes("Context Lost"))) return;
   _origWarn(msg, ...rest);
 };
 

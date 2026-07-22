@@ -12,6 +12,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  icons: [{ rel: "icon", url: "/favicon.svg", type: "image/svg+xml" }],
   title: "Simon Chusseau — Architecte de solutions numériques",
   description:
     "Portfolio de Simon Chusseau — architecte de solutions numériques. TypeScript, Rust, Python, Three.js, IA. Indie maker & créateur de CygnisAI, Mandat, OmniMCP.",
