@@ -1,11 +1,19 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { motion, useInView, animate } from "framer-motion";
+import { motion, useInView, animate, useReducedMotion } from "framer-motion";
 
 import { useIntl, type Dictionary } from "@/providers/intl-provider";
 import { useReveal } from "@/hooks/useReveal";
 import type { GithubProfile, GithubRepo } from "@/types/github";
+import {
+  fadeUp,
+  fadeIn,
+  staggerContainerSlow,
+  cardReveal,
+  hoverCard,
+  reducedMotionVariants,
+} from "@/lib/motion";
 
 interface AboutProps {
   profile: GithubProfile | null;
@@ -24,11 +32,19 @@ function AnimatedCounter({
 }) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "-50px" });
+  const reduce = useReducedMotion();
 
   useEffect(() => {
     if (!inView) return;
     const el = ref.current;
     if (!el) return;
+
+    // Skip counting animation if prefers-reduced-motion
+    if (reduce) {
+      el.textContent = `${value}${suffix}`;
+      return;
+    }
+
     const controls = animate(0, value, {
       duration,
       ease: [0.2, 0.65, 0.3, 0.9],
@@ -37,7 +53,7 @@ function AnimatedCounter({
       },
     });
     return () => controls.stop();
-  }, [inView, value, suffix, duration]);
+  }, [inView, value, suffix, duration, reduce]);
 
   return (
     <span ref={ref} className="tabular-nums">
@@ -64,16 +80,10 @@ const STEPS = [
   },
 ];
 
-/**
- * About — identity section with real GitHub stats animated on enter.
- *
- * Stats card shows: public repos, active languages, total stars — all
- * derived from the `profile` + `repos` props (server-fetched).
- * If the API is unavailable, graceful fallback values are used.
- */
 export function About({ profile, repos }: AboutProps) {
   const { t } = useIntl();
   const { ref, isInView } = useReveal<HTMLDivElement>({ margin: "-100px" });
+  const reduce = useReducedMotion();
 
   const repoCount = profile?.public_repos ?? 11;
 
@@ -98,11 +108,11 @@ export function About({ profile, repos }: AboutProps) {
       className="relative pb-0 pt-0"
     >
       <div className="container mx-auto max-w-6xl px-6">
-        {/* Title */}
+        {/* Title block */}
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
-          transition={{ duration: 0.7, ease: [0.2, 0.65, 0.3, 0.9] }}
+          variants={reduce ? reducedMotionVariants : fadeUp}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
           className="mb-12 max-w-3xl"
         >
           <h2
@@ -114,30 +124,31 @@ export function About({ profile, repos }: AboutProps) {
             </span>
           </h2>
           <motion.p
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
+            variants={reduce ? reducedMotionVariants : fadeIn}
+            initial="hidden"
+            animate={isInView ? "visible" : "hidden"}
+            transition={{ delay: 0.25 }}
             className="mt-4 text-lg text-muted-foreground"
           >
             {t["about.subtitle"]}
           </motion.p>
         </motion.div>
 
-
-
-        {/* Process steps — Bento Grid */}
-        <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
-          {STEPS.map((step, i) => (
+        {/* Process steps — stagger via container variant */}
+        <motion.div
+          className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3"
+          variants={reduce ? reducedMotionVariants : staggerContainerSlow}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+        >
+          {STEPS.map((step) => (
             <motion.div
               key={step.idKey}
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{
-                duration: 0.5,
-                delay: 0.2 + i * 0.12,
-                ease: [0.2, 0.65, 0.3, 0.9],
-              }}
-              className="group relative overflow-hidden rounded-2xl border border-white/10 bg-neutral-900/50 backdrop-blur-md p-6 transition-all duration-300 hover:border-white/20"
+              variants={reduce ? reducedMotionVariants : cardReveal}
+              whileHover={reduce ? undefined : hoverCard.whileHover}
+              whileTap={reduce ? undefined : hoverCard.whileTap}
+              transition={hoverCard.transition}
+              className="group relative overflow-hidden rounded-2xl border border-white/10 bg-neutral-900/50 backdrop-blur-md p-6 transition-colors duration-300 hover:border-white/20"
             >
               {/* Hover glow */}
               <div
@@ -161,13 +172,15 @@ export function About({ profile, repos }: AboutProps) {
               </p>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
 
-        {/* Mes chiffres — Gradient Banner */}
+        {/* Stats Banner */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.6, delay: 0.3, ease: [0.2, 0.65, 0.3, 0.9] }}
+          variants={reduce ? reducedMotionVariants : fadeUp}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          transition={{ delay: 0.35 }}
+          whileHover={reduce ? undefined : { y: -2 }}
           className="mt-24 overflow-hidden rounded-3xl bg-gradient-to-br from-purple-400 via-pink-400 to-amber-300"
         >
           <div className="px-6 py-10 md:px-10 md:py-12">
@@ -203,4 +216,3 @@ export function About({ profile, repos }: AboutProps) {
     </section>
   );
 }
-

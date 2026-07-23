@@ -17,6 +17,7 @@ import {
   VercelIcon,
 } from "@/components/tech-stack-icons";
 import { useIntl } from "@/providers/intl-provider";
+import { fadeUp, staggerContainer, reducedMotionVariants } from "@/lib/motion";
 
 interface Tech {
   name: string;
@@ -46,10 +47,15 @@ const LogoElement = ({ tech }: { tech: Tech }) => {
   const Icon = tech.icon;
 
   return (
-    <span className="flex items-center justify-center">
-      <Icon className="h-12 w-auto opacity-80 transition-opacity duration-500 hover:opacity-100" />
+    <motion.span
+      className="flex items-center justify-center"
+      whileHover={{ scale: 1.15, opacity: 1 }}
+      whileTap={{ scale: 0.95 }}
+      transition={{ type: "spring", stiffness: 400, damping: 25 }}
+    >
+      <Icon className="h-12 w-auto opacity-70 transition-opacity duration-300 hover:opacity-100" />
       <span className="sr-only">{tech.name}</span>
-    </span>
+    </motion.span>
   );
 };
 
@@ -91,24 +97,23 @@ const Marquee = () => {
 
 /* ──────────── Section component ──────────── */
 
-/**
- * TechStack — Minimalist monochrome logo marquee.
- *
- * Style inspired by Lovable / Vercel / Linear.
- * - No containers, badges, borders, or backgrounds
- * - Logos are monochrome (white/gray) with smooth hover transition
- * - Gradient fade mask on edges
- * - Centered title above
- */
 export function TechStack() {
   const { t } = useIntl();
+  const reduce = useReducedMotion();
 
   return (
     <section className="relative pb-16 pt-12 md:pb-24 md:pt-20">
       <div className="mx-auto max-w-6xl px-6">
-        <h2 className="mb-8 text-center text-lg font-medium text-neutral-200 md:text-xl">
+        {/* Animated title — fades up on scroll */}
+        <motion.h2
+          variants={reduce ? reducedMotionVariants : fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          className="mb-8 text-center text-lg font-medium text-neutral-200 md:text-xl"
+        >
           {t["tech.title"]}
-        </h2>
+        </motion.h2>
 
         <div>
           <Marquee />

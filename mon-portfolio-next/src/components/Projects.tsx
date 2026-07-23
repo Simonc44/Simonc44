@@ -1,10 +1,17 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useReveal } from "@/hooks/useReveal";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useIntl, type Dictionary } from "@/providers/intl-provider";
 import type { GithubRepo } from "@/types/github";
+import {
+  fadeUp,
+  fadeUpLarge,
+  staggerContainerFast,
+  cardReveal,
+  hoverCard,
+  reducedMotionVariants,
+} from "@/lib/motion";
 
 interface ProjectsProps {
   /** Live repo list from server-side GitHub fetch. Null = API unavailable. */
@@ -66,28 +73,19 @@ function RepoCard({ repo, t }: { repo: GithubRepo; t: Dictionary }) {
   const [imgError, setImgError] = useState(false);
   const repoImage = REPO_IMAGES[repo.name];
   const hasImage = Boolean(repoImage) && !imgError;
-
-  const cardVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: -8 },
-  };
+  const reduce = useReducedMotion();
 
   return (
     <motion.div
       layout
-      variants={cardVariants}
-      whileHover={{ y: -4, scale: 1.01 }}
-      whileTap={{ scale: 0.98 }}
-      transition={{
-        type: "spring",
-        stiffness: 100,
-        damping: 20,
-        mass: 0.8,
-      }}
+      variants={reduce ? reducedMotionVariants : cardReveal}
+      whileHover={reduce ? undefined : hoverCard.whileHover}
+      whileTap={reduce ? undefined : hoverCard.whileTap}
+      transition={hoverCard.transition}
       className="group"
     >
-      {/* ── Clickable image / preview ── */}      <a
+      {/* ── Clickable image / preview ── */}
+      <a
         href={repo.html_url}
         target="_blank"
         rel="noopener noreferrer"
@@ -99,33 +97,31 @@ function RepoCard({ repo, t }: { repo: GithubRepo; t: Dictionary }) {
             alt={`${repo.name} preview`}
             loading="lazy"
             onError={() => setImgError(true)}
-            className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.02]"
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
           />
         ) : (
-          /* Gradient placeholder fallback */
           <div
-            className={`relative h-full w-full bg-gradient-to-br ${repoGradient(repo.name)} transition-transform duration-300 ease-out group-hover:scale-[1.02]`}
+            className={`relative h-full w-full bg-gradient-to-br ${repoGradient(repo.name)} transition-transform duration-500 ease-out group-hover:scale-[1.04]`}
           >
-            {/* Decorative pattern */}
             <div className="absolute inset-0 opacity-20" style={{
               backgroundImage: `radial-gradient(circle at 30% 40%, rgba(255,255,255,0.3) 0%, transparent 50%),
                                 radial-gradient(circle at 70% 60%, rgba(255,255,255,0.15) 0%, transparent 50%)`,
             }} />
-
-            {/* Repo name initial as large letter */}
             <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-6xl font-bold text-white/10 select-none" aria-hidden="true">
               {repo.name.charAt(0).toUpperCase()}
             </span>
           </div>
         )}
+        {/* Hover overlay glow */}
+        <div className="absolute inset-0 rounded-xl bg-white/0 transition-colors duration-300 group-hover:bg-white/5" aria-hidden="true" />
       </a>
 
       {/* ── Title & description below image ── */}
-      <h3 className="mt-3 font-semibold text-lg text-white">
+      <h3 className="mt-3 font-semibold text-lg text-white transition-colors duration-200 group-hover:text-white/90">
         {repo.name}
       </h3>
       {description && (
-        <p className="mt-1 text-sm text-neutral-400 line-clamp-2">
+        <p className="mt-1 text-sm text-neutral-400 line-clamp-2 transition-colors duration-200 group-hover:text-neutral-300">
           {description}
         </p>
       )}
@@ -136,7 +132,7 @@ function RepoCard({ repo, t }: { repo: GithubRepo; t: Dictionary }) {
 
 export function Projects({ repos }: ProjectsProps) {
   const { t } = useIntl();
-  const { ref, isInView } = useReveal<HTMLDivElement>({ margin: "-100px" });
+  const reduce = useReducedMotion();
 
   const displayRepos = useMemo(() => {
     if (!repos) return [];
@@ -150,20 +146,19 @@ export function Projects({ repos }: ProjectsProps) {
     return [...featured, ...rest].slice(0, 9);
   }, [repos]);
 
-
-
   return (
     <section
       id="projects"
       aria-labelledby="projects-title"
-      ref={ref}
       className="relative pt-16 pb-0 md:pt-24 md:pb-0"
     >
       <div className="container mx-auto max-w-7xl px-6">
+        {/* Section header — whileInView for clean scroll trigger */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          variants={reduce ? reducedMotionVariants : fadeUpLarge}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
           className="mb-16 max-w-3xl"
         >
           <h2
@@ -177,22 +172,14 @@ export function Projects({ repos }: ProjectsProps) {
           </p>
         </motion.div>
 
-        {/* Projects Grid — 4 columns */}
+        {/* Projects Grid — stagger children with whileInView */}
         <motion.div
           layout
-          className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
+          variants={reduce ? reducedMotionVariants : staggerContainerFast}
           initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          variants={{
-            hidden: { opacity: 0 },
-            visible: {
-              opacity: 1,
-              transition: {
-                staggerChildren: 0.08,
-                delayChildren: 0.1,
-              },
-            },
-          }}
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
         >
           <AnimatePresence mode="popLayout">
             {displayRepos.map((repo) => (

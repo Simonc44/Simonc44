@@ -2,6 +2,14 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { useIntl, type Dictionary } from "@/providers/intl-provider";
+import {
+  fadeIn,
+  fadeUp,
+  staggerContainerSlow,
+  cardReveal,
+  slideInLeft,
+  reducedMotionVariants,
+} from "@/lib/motion";
 
 /* ── SVG Social Icons ── */
 function GithubIcon({ className }: { className?: string }) {
@@ -71,9 +79,6 @@ const COLUMN_LINKS: { labelKey: keyof Dictionary; href: string }[] = [
   { labelKey: "footer.contact", href: "#contact" },
 ];
 
-/**
- * Premium multi-section footer with hero banner, nav bar, and info grid.
- */
 export function Footer() {
   const { t } = useIntl();
   const reduce = useReducedMotion();
@@ -81,15 +86,14 @@ export function Footer() {
 
   return (
     <motion.footer
-      initial={reduce ? undefined : { opacity: 0 }}
-      whileInView={reduce ? undefined : { opacity: 1 }}
+      variants={reduce ? reducedMotionVariants : fadeIn}
+      initial="hidden"
+      whileInView="visible"
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.6 }}
       className="pt-16 pb-8"
     >
-      {/* ── Bloc 1: Freebuff Hero Banner (full-width, titre par-dessus l'image) ── */}
+      {/* ── Hero Banner ── */}
       <div className="relative mt-12 h-[46vh] min-h-[360px] w-full overflow-hidden select-none md:h-[56vh]">
-        {/* 1. L'image de paysage en fond (z-10) */}
         <img
           src="/footer.png"
           alt="Space Nebula Landscape"
@@ -105,7 +109,7 @@ export function Footer() {
           className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-full w-full select-none object-cover object-bottom brightness-[0.85]"
         />
 
-        {/* 2. Le Titre PAR-DESSUS l'image (z-20) — fondu en bas pour fondre dans la nébuleuse */}
+        {/* Title overlay */}
         <div
           className="pointer-events-none absolute inset-x-0 bottom-[clamp(80px,12vw,220px)] z-20 text-center"
           style={{
@@ -121,40 +125,45 @@ export function Footer() {
           </h2>
         </div>
 
-        {/* 3. Gradient de fondu du bas pour la transition avec les liens (z-30) */}
+        {/* Gradient fade bottom */}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 z-30 h-20 bg-gradient-to-t from-[#0a0a0a] to-transparent" />
       </div>
 
-      {/* ── Bloc 2: Sub-nav Bar (full-width separator) ── */}
       <div className="border-t border-white/10" />
 
       <div className="container mx-auto max-w-7xl px-6">
+        {/* Copyright + socials */}
         <div className="pt-6 pb-12 flex flex-wrap items-center justify-between gap-4 text-xs text-neutral-400">
           <span>{t["footer.copyright"].replace("{year}", String(year))}</span>
           <div className="flex items-center gap-2">
             {SOCIALS.map((social) => (
-              <a
+              <motion.a
                 key={social.id}
                 href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center text-neutral-400 transition-colors hover:text-white"
+                whileHover={reduce ? undefined : { scale: 1.2, color: "#ffffff" }}
+                whileTap={reduce ? undefined : { scale: 0.9 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                className="inline-flex items-center justify-center text-neutral-400 transition-colors"
                 aria-label={social.label}
               >
                 <social.Icon className="h-4 w-4" />
-              </a>
+              </motion.a>
             ))}
           </div>
         </div>
 
-        {/* ── Bloc 3: Footer Columns Grid ── */}          <div className="grid grid-cols-1 gap-8 pt-8 md:grid-cols-2 max-w-7xl mx-auto">
+        {/* Footer columns — stagger on scroll */}
+        <motion.div
+          className="grid grid-cols-1 gap-8 pt-8 md:grid-cols-2 max-w-7xl mx-auto"
+          variants={reduce ? reducedMotionVariants : staggerContainerSlow}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+        >
           {/* Column 1: Branding */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.5, ease: [0.2, 0.65, 0.3, 0.9] }}
-          >
+          <motion.div variants={reduce ? reducedMotionVariants : cardReveal}>
             <h3 className="font-display text-lg font-semibold text-white mb-4">
               Simon Chusseau
             </h3>
@@ -164,23 +173,18 @@ export function Footer() {
           </motion.div>
 
           {/* Column 2: Navigation */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.5, delay: 0.1, ease: [0.2, 0.65, 0.3, 0.9] }}
-          >
+          <motion.div variants={reduce ? reducedMotionVariants : cardReveal}>
             <h4 className="font-semibold text-white mb-3 text-sm uppercase tracking-wider">
               {t["footer.navTitle"]}
             </h4>
-            <ul className="space-y-2.5">
-              {COLUMN_LINKS.map((link, i) => (
+            <motion.ul
+              className="space-y-2.5"
+              variants={reduce ? reducedMotionVariants : staggerContainerSlow}
+            >
+              {COLUMN_LINKS.map((link) => (
                 <motion.li
                   key={link.labelKey}
-                  initial={{ opacity: 0, x: -8 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.2 + i * 0.06, duration: 0.3, ease: [0.2, 0.65, 0.3, 0.9] }}
+                  variants={reduce ? reducedMotionVariants : slideInLeft}
                 >
                   <a
                     href={link.href}
@@ -190,9 +194,9 @@ export function Footer() {
                   </a>
                 </motion.li>
               ))}
-            </ul>
+            </motion.ul>
           </motion.div>
-        </div>
+        </motion.div>
       </div>
     </motion.footer>
   );
