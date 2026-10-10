@@ -1,22 +1,22 @@
 {
   "username": "Simonc44",
-  "generated_at": "2026-10-09T13:19:33Z",
+  "generated_at": "2026-10-10T12:34:06Z",
   "range": {
     "start": "2025-10-05",
+    "end": "2026-10-10"
+  },
+  "total_contributions": 1133,
+  "active_days": 123,
+  "avg_per_active_day": 9.2,
+  "current_streak": {
+    "length": 105,
+    "start": "2026-06-27",
     "end": "2026-10-09"
   },
-  "total_contributions": 1132,
-  "active_days": 122,
-  "avg_per_active_day": 9.3,
-  "current_streak": {
-    "length": 104,
-    "start": "2026-06-27",
-    "end": "2026-10-08"
-  },
   "longest_streak": {
-    "length": 104,
+    "length": 105,
     "start": "2026-06-27",
-    "end": "2026-10-08"
+    "end": "2026-10-09"
   },
   "best_day": {
     "date": "2026-07-24",
@@ -73,7 +73,7 @@
     },
     {
       "month": "2026-10",
-      "total": 11
+      "total": 12
     }
   ],
   "days": [
@@ -1555,6 +1555,10 @@
     },
     {
       "date": "2026-10-09",
+      "count": 1
+    },
+    {
+      "date": "2026-10-10",
       "count": 0
     }
   ]
